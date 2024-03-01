@@ -15,7 +15,7 @@ app.add_middleware(
 
 # Define your PostgreSQL connection parameters
 DB_NAME = 'zf_digitaltwin'
-DB_USER = 'postgres'
+DB_USER = 'likhith'
 DB_PASSWORD = 'postgres'
 DB_HOST = 'localhost'
 DB_PORT = '5432'
