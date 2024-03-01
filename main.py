@@ -85,6 +85,13 @@ async def water_quality_sub(table_name: str, data: dict):
 async def water_level_sub(table_name: str, data: dict):
     return process_data(table_name, data, ['waterlevel', 'temperature'])
 
+@app.post("/motorsub/{table_name}")
+async def water_level_sub(table_name: str, data: dict):
+    return process_data(table_name, data, ['status', 'current'])
+
+@app.post("/roplantsub/{table_name}")
+async def water_level_sub(table_name: str, data: dict):
+    return process_data(table_name, data, ['tds'])
     
 if __name__=='__main__':
     import uvicorn
