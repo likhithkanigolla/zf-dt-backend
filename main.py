@@ -35,8 +35,7 @@ class SensorData(BaseModel):
     con: str
     ct: str
 
-@app.post("/incoming-data/{table_name}")
-async def incoming_data(table_name: str, data: dict):
+def process_data(table_name: str, data: dict, column_order: list):
     try:
         # Extract data from the received JSON
         cin = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('con', None)
@@ -61,20 +60,14 @@ async def incoming_data(table_name: str, data: dict):
         # Build the insert statement dynamically
         insert_statement = f"""
             INSERT INTO {table_name} 
-            (creationtime, temperature, voltage, uncompensated_tds, compensated_tds) 
-            VALUES (%s, %s, %s, %s, %s)
+            (creationtime, {', '.join(column_order)}) 
+            VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
         """
         
         # Insert data into PostgreSQL database
         cur.execute(
             insert_statement,
-            [
-                timestamp,
-                con_values[0], # temperature
-                con_values[1], # voltage
-                con_values[2], # uncompensated_tds
-                con_values[3]  # compensated_tds
-            ]
+            [timestamp] + [con_values[i] for i in range(len(column_order))]
         )
         conn.commit()
 
@@ -83,18 +76,14 @@ async def incoming_data(table_name: str, data: dict):
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise HTTPException(status_code=500, detail='Internal Server Error')
-    
-# Testing Code  
-# @app.post("/incoming-data/{table_name}")
-# async def incoming_data(table_name: str, data: dict):
-#     try:
-#         # Extract data from the received JSON
-#         cin = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {})
-#         print(f'Received data for table {table_name}:', cin)
-#         return {'message': 'Data received successfully.'}
-#     except Exception as e:
-#         print('Error processing data:', str(e))
-#         raise HTTPException(status_code=500, detail='Internal Server Error')
+
+@app.post("/waterqualitysub/{table_name}")
+async def water_quality_sub(table_name: str, data: dict):
+    return process_data(table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
+
+@app.post("/waterlevelsub/{table_name}")
+async def water_level_sub(table_name: str, data: dict):
+    return process_data(table_name, data, ['temperature', 'waterlevel'])
 
     
 if __name__=='__main__':
