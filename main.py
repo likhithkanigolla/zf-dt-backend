@@ -83,7 +83,7 @@ async def water_quality_sub(table_name: str, data: dict):
 
 @app.post("/waterlevelsub/{table_name}")
 async def water_level_sub(table_name: str, data: dict):
-    return process_data(table_name, data, ['temperature', 'waterlevel'])
+    return process_data(table_name, data, ['waterlevel', 'temperature'])
 
     
 if __name__=='__main__':
