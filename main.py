@@ -34,6 +34,12 @@ cur = conn.cursor()
 class SensorData(BaseModel):
     con: str
     ct: str
+    
+class SimulationInput(BaseModel):
+    number1: float
+    number2: float
+    number3: float
+    number4: float
 
 def process_data(table_name: str, data: dict, column_order: list):
     try:
@@ -92,6 +98,15 @@ async def water_level_sub(table_name: str, data: dict):
 @app.post("/roplantsub/{table_name}")
 async def water_level_sub(table_name: str, data: dict):
     return process_data(table_name, data, ['tds'])
+
+@app.post("/calculate")
+async def calculate_simulation(input_data: SimulationInput):
+    try:
+        # Perform calculation (example: sum of numbers)
+        result = input_data.number1 + input_data.number2 + input_data.number3 + input_data.number4
+        return {"result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
     
 if __name__=='__main__':
     import uvicorn
