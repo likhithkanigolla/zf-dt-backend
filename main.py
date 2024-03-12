@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 import psycopg2
+import math
 
 app = FastAPI()
 app.add_middleware(
@@ -40,6 +41,45 @@ class SimulationInput(BaseModel):
     number2: float
     number3: float
     number4: float
+    
+class ROFiltrationRequest(BaseModel):
+    initial_tds: float = 800
+    desired_tds: float = 50
+    applied_pressure: float = 101325
+    hydraulic_pressure_drop: float = 10000
+    dynamic_viscosity: float = 0.001
+    membrane_permeability: float = 1e-9
+    effective_membrane_area: float = 1
+    molar_concentration: float = 0.01
+    voltage: float = 10.0
+    temperature: float = 30.0
+
+# Constants
+R = 8.314  # Ideal gas constant (J/(mol·K))
+T = 298.15  # Temperature (25°C in Kelvin)
+i = 1  # van't Hoff factor (assumed for simplicity)
+
+# Function to calculate osmotic pressure
+def calculate_osmotic_pressure(C):
+    return i * C * R * T
+
+# Function to calculate water flux
+def calculate_water_flux(P, delta_P, mu, L):
+    return L * (P - delta_P) / mu
+
+# Function to calculate permeate flow rate
+def calculate_permeate_flow_rate(A, water_flux):
+    return A * water_flux
+
+# Function to calculate TDS reduction
+def calculate_tds_reduction(initial_tds, permeate_flow_rate, tds_reduction_rate):
+    return initial_tds - tds_reduction_rate * permeate_flow_rate
+
+# Function to calculate TDS value based on voltage and temperature
+def calculate_tds(voltage, temperature):
+    CV = voltage / (1.0 + 0.02 * (temperature - 25))
+    return 133.42 * (CV ** 3) - 255.86 * (CV ** 2) + 857.39 * CV * 0.5
+
 
 def process_data(table_name: str, data: dict, column_order: list):
     try:
@@ -107,6 +147,45 @@ async def calculate_simulation(input_data: SimulationInput):
         return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+@app.post("/calculate_ro_filtration")
+def calculate_ro_filtration(params: ROFiltrationRequest):
+    # Get parameters from request
+    initial_tds = params.initial_tds
+    desired_tds = params.desired_tds
+    P = params.applied_pressure
+    delta_P = params.hydraulic_pressure_drop
+    mu = params.dynamic_viscosity
+    L = params.membrane_permeability
+    A = params.effective_membrane_area
+    C = params.molar_concentration
+    voltage = params.voltage
+    temperature = params.temperature
+    
+    # Calculate osmotic pressure
+    osmotic_pressure = calculate_osmotic_pressure(C)
+
+    # Calculate water flux
+    water_flux = calculate_water_flux(P, delta_P, mu, L)
+
+    # Calculate permeate flow rate
+    permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
+
+    # Calculate TDS reduction
+    tds_reduction_rate = 0.05  # Example TDS reduction rate (ppm/s·m²)
+    tds_final = calculate_tds_reduction(initial_tds, permeate_flow_rate, tds_reduction_rate)
+
+    # Calculate TDS value based on voltage and temperature
+    tds_calculated = calculate_tds(voltage, temperature)
+
+    return {
+        "osmotic_pressure": osmotic_pressure,
+        "water_flux": water_flux,
+        "permeate_flow_rate": permeate_flow_rate,
+        "final_tds_concentration_after_ro_tank": tds_final,
+        "calculated_tds_value": tds_calculated
+    }  
+
     
 if __name__=='__main__':
     import uvicorn
