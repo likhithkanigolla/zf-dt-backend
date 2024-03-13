@@ -45,10 +45,10 @@ class SimulationInput(BaseModel):
 class ROFiltrationRequest(BaseModel):
     initial_tds: float = 800
     desired_tds: float = 50
-    applied_pressure: float = 101325
-    hydraulic_pressure_drop: float = 10000
-    dynamic_viscosity: float = 0.001
-    membrane_permeability: float = 1e-9
+    applied_pressure: float = 300000
+    hydraulic_pressure_drop: float = 50000
+    dynamic_viscosity: float = 0.0009
+    membrane_permeability: float = 5e-9
     effective_membrane_area: float = 1
     molar_concentration: float = 0.01
     voltage: float = 10.0
@@ -72,8 +72,8 @@ def calculate_permeate_flow_rate(A, water_flux):
     return A * water_flux
 
 # Function to calculate TDS reduction
-def calculate_tds_reduction(initial_tds, permeate_flow_rate, tds_reduction_rate):
-    return initial_tds - tds_reduction_rate * permeate_flow_rate
+def calculate_tds_reduction(initial_tds, tds_reduction_rate):
+    return initial_tds * (1 - tds_reduction_rate)
 
 # Function to calculate TDS value based on voltage and temperature
 def calculate_tds(voltage, temperature):
@@ -150,42 +150,69 @@ async def calculate_simulation(input_data: SimulationInput):
     
 @app.post("/calculate_ro_filtration")
 def calculate_ro_filtration(params: ROFiltrationRequest):
-    # Get parameters from request
-    initial_tds = params.initial_tds
-    desired_tds = params.desired_tds
-    P = params.applied_pressure
-    delta_P = params.hydraulic_pressure_drop
-    mu = params.dynamic_viscosity
-    L = params.membrane_permeability
-    A = params.effective_membrane_area
-    C = params.molar_concentration
-    voltage = params.voltage
-    temperature = params.temperature
-    
-    # Calculate osmotic pressure
-    osmotic_pressure = calculate_osmotic_pressure(C)
+    try:
+        # Get parameters from request
+        initial_tds = params.initial_tds
+        desired_tds = params.desired_tds  # Assume desired_tds is a single float value
+        P = params.applied_pressure
+        delta_P = params.hydraulic_pressure_drop
+        mu = params.dynamic_viscosity
+        L = params.membrane_permeability
+        A = params.effective_membrane_area
+        C = params.molar_concentration
+        voltage = params.voltage
+        temperature = params.temperature
 
-    # Calculate water flux
-    water_flux = calculate_water_flux(P, delta_P, mu, L)
+        # Validate input parameters here
 
-    # Calculate permeate flow rate
-    permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
+        volume_of_water = 1000
+        
+        # Define maximum number of iterations
+        max_iterations = 10  # Example maximum number of iterations
 
-    # Calculate TDS reduction
-    tds_reduction_rate = 0.05  # Example TDS reduction rate (ppm/s·m²)
-    tds_final = calculate_tds_reduction(initial_tds, permeate_flow_rate, tds_reduction_rate)
+        # Initialize cycle count
+        cycle_count = 0
+        
+        # Calculate osmotic pressure
+        osmotic_pressure = calculate_osmotic_pressure(C)
 
-    # Calculate TDS value based on voltage and temperature
-    tds_calculated = calculate_tds(voltage, temperature)
+        # Define filtration process
+        while cycle_count < max_iterations:
+            # Increment cycle count
+            cycle_count += 1
+            
+            # Calculate water flux
+            water_flux = calculate_water_flux(P, delta_P, mu, L)
 
-    return {
-        "osmotic_pressure": osmotic_pressure,
-        "water_flux": water_flux,
-        "permeate_flow_rate": permeate_flow_rate,
-        "final_tds_concentration_after_ro_tank": tds_final,
-        "calculated_tds_value": tds_calculated
-    }  
+            # Calculate permeate flow rate
+            permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
+            
+            time_estimation_hours = volume_of_water / permeate_flow_rate
+            # Calculate TDS reduction
+            tds_reduction_rate = 0.70  # Example TDS reduction rate (ppm/s·m²)
+            tds_final = calculate_tds_reduction(initial_tds, tds_reduction_rate)
+            
+            initial_tds = tds_final
 
+            # Check if the final TDS is within the desired range
+            if desired_tds >= tds_final:
+                break  # Exit the loop if the desired TDS is achieved
+
+        # Calculate TDS value based on voltage and temperature
+        tds_calculated = calculate_tds(voltage, temperature)
+
+        return {
+            "osmotic_pressure": osmotic_pressure,
+            "water_flux": water_flux,
+            "permeate_flow_rate": permeate_flow_rate,
+            "final_tds_concentration_after_ro_tank": tds_final,
+            "calculated_tds_value": tds_calculated,
+            "cycle_count": cycle_count,
+            "time_estimation_hours": time_estimation_hours
+        }
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=422, detail=str(e))
     
 if __name__=='__main__':
     import uvicorn
