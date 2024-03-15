@@ -45,3 +45,6 @@ class Database:
             # Handle any exceptions that occur during table creation
             print(f"Error creating tables: {str(e)}")
             self.conn.rollback()
+
+#Creating a DB instance class
+db = Database()
