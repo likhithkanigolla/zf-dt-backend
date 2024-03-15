@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .models import SimulationInput, ROFiltrationRequest
+from ..modules.models import SimulationInput, ROFiltrationRequest
 
 router = APIRouter()
 
