@@ -4,7 +4,7 @@ import os
 class Database:
     def __init__(self):
         # Define your PostgreSQL connection parameters
-        self.DB_NAME = 'testdb'
+        self.DB_NAME = 'zf_digitaltwin'
         self.DB_USER = 'likhith'
         self.DB_PASSWORD = 'postgres'
         self.DB_HOST = 'localhost'
