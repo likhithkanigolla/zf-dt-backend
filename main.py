@@ -17,8 +17,8 @@ app.add_middleware(
 db = database.Database()
 
 # Include routers from different modules
-app.include_router(device_router, prefix="/", tags=["Device"])
-app.include_router(calculate_router, prefix="/", tags=["Calculate"])
+app.include_router(device_router, prefix="", tags=["Device"])
+app.include_router(calculate_router, prefix="", tags=["Calculate"])
 
 if __name__ == "__main__":
     import uvicorn
