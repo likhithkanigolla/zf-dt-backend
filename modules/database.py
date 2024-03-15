@@ -1,4 +1,5 @@
 import psycopg2
+import os
 
 class Database:
     def __init__(self):
@@ -18,3 +19,16 @@ class Database:
             port=self.DB_PORT
         )
         self.cur = self.conn.cursor()
+
+        # Check and create tables from SQL file
+        self.create_tables()
+
+    def create_tables(self):
+        # Read SQL file
+        sql_file = os.path.join(os.path.dirname(__file__), 'sql', 'postgres_tables.sql')
+        with open(sql_file, 'r') as file:
+            sql_statements = file.read()
+
+        # Execute SQL statements
+        self.cur.execute(sql_statements)
+        self.conn.commit()
