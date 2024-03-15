@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from modules import calculation
+from .models import SimulationInput, ROFiltrationRequest
 
 router = APIRouter()
 
 @router.post("/calculate")
-async def calculate_simulation(input_data: calculation.SimulationInput):
-    return calculation.calculate_simulation(input_data)
+async def calculate_simulation(input_data: SimulationInput):
+    return calculate_simulation(input_data)
 
 @router.post("/calculate_ro_filtration")
-def calculate_ro_filtration(params: calculation.ROFiltrationRequest):
-    return calculation.calculate_ro_filtration(params)
+def calculate_ro_filtration(params: ROFiltrationRequest):
+    return calculate_ro_filtration(params)

@@ -1,8 +1,7 @@
 from .models import SensorData
-from .database import db
 import json
 
-def process_data(table_name, data, column_order):
+def process_data(db, table_name, data, column_order):
     try:
         # Extract data from the received JSON
         cin = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('con', None)
@@ -38,14 +37,14 @@ def process_data(table_name, data, column_order):
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
 
-def process_water_quality_sub(table_name, data):
-    return process_data(table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
+def process_water_quality_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
 
-def process_water_level_sub(table_name, data):
-    return process_data(table_name, data, ['waterlevel', 'temperature'])
+def process_water_level_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['waterlevel', 'temperature'])
 
-def process_motor_sub(table_name, data):
-    return process_data(table_name, data, ['status', 'current'])
+def process_motor_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['status', 'current'])
 
-def process_ro_plant_sub(table_name, data):
-    return process_data(table_name, data, ['tds'])
+def process_ro_plant_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['tds'])
