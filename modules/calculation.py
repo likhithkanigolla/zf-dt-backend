@@ -5,6 +5,23 @@ import math
 R = 8.314  # Ideal gas constant (J/(mol·K))
 T = 298.15  # Temperature (25°C in Kelvin)
 i = 1  # van't Hoff factor (assumed for simplicity)
+C= 1.92 #
+
+# 11.6 g of NaCl is dissolved in 100 g of water. The final mass concentration ρ(NaCl) is
+# ρ(NaCl) = 
+# 11.6 g
+# /
+# 11.6 g + 100 g
+#  = 0.104 g/g = 10.4 %.
+# The volume of such a solution is 104.3mL (volume is directly observable); its density is calculated to be 1.07 (111.6g/104.3mL)
+
+# The molar concentration of NaCl in the solution is therefore
+
+# c(NaCl) = 
+# 11.6 g
+# /
+# 58 g/mol
+#  / 104.3 mL = 0.00192 mol/mL = 1.92 mol/L.
 
 # Calculation functions
 def calculate_osmotic_pressure(C):
@@ -38,8 +55,11 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     C = params.molar_concentration
     voltage = params.voltage
     temperature = params.temperature
+    volume_of_water = params.sump_capacity
+    print("Volume of the water:", volume_of_water)
+    
+    initial_tds=calculate_tds(voltage,temperature)
 
-    volume_of_water = 1000
     max_iterations = 10
     cycle_count = 0
     
@@ -51,9 +71,11 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
         permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
         time_estimation_hours = volume_of_water / permeate_flow_rate
         tds_reduction_rate = 0.70
+        print("initial TDS", initial_tds)
         tds_final = calculate_tds_reduction(initial_tds, tds_reduction_rate)
         initial_tds = tds_final
 
+        print(cycle_count,tds_final)
         if desired_tds >= tds_final:
             break
 

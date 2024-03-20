@@ -23,3 +23,4 @@ class ROFiltrationRequest(BaseModel):
     molar_concentration: float = 0.01
     voltage: float = 10.0
     temperature: float = 30.0
+    sump_capacity: float=100
