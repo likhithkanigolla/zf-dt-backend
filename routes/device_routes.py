@@ -15,3 +15,7 @@ async def water_level_sub(table_name: str, data: dict):
 @router.post("/motorsub/{table_name}")
 async def motor_sub(table_name: str, data: dict):
     return data_processing.process_motor_sub(db, table_name, data)
+
+@router.post("/waterflowsub/{table_name}")
+async def motor_sub(table_name: str, data: dict):
+    return data_processing.process_water_flow_sub(db, table_name, data)

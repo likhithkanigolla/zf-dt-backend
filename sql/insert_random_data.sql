@@ -1,6 +1,6 @@
 -- Inserting Random data for the past 1 month 
--- sump1_data
-INSERT INTO sump1_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds, turbudity, ph)
+-- sump1_wd_data
+INSERT INTO sump1_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds, turbudity, ph)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,
@@ -14,7 +14,7 @@ FROM
     GENERATE_SERIES(NOW() - INTERVAL '1 month', NOW(), INTERVAL '1 hour') AS gs(timestamp);
 
 
-INSERT INTO oht1_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds, turbudity, ph)
+INSERT INTO oht1_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds, turbudity, ph)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,
@@ -27,7 +27,7 @@ SELECT
 FROM 
     GENERATE_SERIES(NOW() - INTERVAL '1 month', NOW(), INTERVAL '1 hour') AS gs(timestamp);
 
-INSERT INTO roplant1_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
+INSERT INTO roplant1_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,
@@ -38,7 +38,7 @@ SELECT
 FROM 
     GENERATE_SERIES(NOW() - INTERVAL '1 month', NOW(), INTERVAL '1 hour') AS gs(timestamp);
 
-INSERT INTO ro1_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
+INSERT INTO ro1_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,
@@ -49,7 +49,7 @@ SELECT
 FROM 
     GENERATE_SERIES(NOW() - INTERVAL '1 month', NOW(), INTERVAL '1 hour') AS gs(timestamp);
 
-INSERT INTO ro2_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
+INSERT INTO ro2_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,
@@ -60,7 +60,7 @@ SELECT
 FROM 
     GENERATE_SERIES(NOW() - INTERVAL '1 month', NOW(), INTERVAL '1 hour') AS gs(timestamp);
 
-INSERT INTO ro3_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
+INSERT INTO ro3_wd_data (timestamp, creationtime, temperature, voltage, uncompensated_tds, compensated_tds)
 SELECT 
     gs.timestamp,
     CURRENT_TIMESTAMP,

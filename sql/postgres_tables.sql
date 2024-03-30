@@ -1,6 +1,6 @@
 -- Creation of Tables 
 
-CREATE TABLE sump1_data (
+CREATE TABLE sump1_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -24,8 +24,15 @@ CREATE TABLE motor1_status (
     status FLOAT,
     current FLOAT
 );
+
+CREATE TABLE oht_krbadm_wf_data (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
  
-CREATE TABLE oht1_data (
+CREATE TABLE oht1_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -43,7 +50,7 @@ CREATE TABLE oht1_waterlevel (
     distance FLOAT
 );
 
-CREATE TABLE oht_rop1_data (
+CREATE TABLE oht_rop1_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -54,7 +61,7 @@ CREATE TABLE oht_rop1_data (
 	ph Float
 );
 
-CREATE TABLE roplant1_data (
+CREATE TABLE roplant1_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -69,7 +76,7 @@ CREATE TABLE roplant1_tds (
     tds FLOAT
 );
 
-CREATE TABLE ro1_data (
+CREATE TABLE ro1_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -78,7 +85,7 @@ CREATE TABLE ro1_data (
     compensated_tds FLOAT
 );
 
-CREATE TABLE ro2_data (
+CREATE TABLE ro2_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -87,7 +94,7 @@ CREATE TABLE ro2_data (
     compensated_tds FLOAT
 );
 
-CREATE TABLE ro3_data (
+CREATE TABLE ro3_wd_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,

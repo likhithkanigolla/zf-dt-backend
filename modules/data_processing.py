@@ -20,7 +20,7 @@ def process_data(db, table_name, data, column_order):
         timestamp = creation_time.replace('T', ' ').replace('Z', '')
 
         insert_statement = f"""
-            INSERT INTO {table_name} 
+            INSERT INTO "{table_name}" 
             (creationtime, {', '.join(column_order)}) 
             VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
         """
@@ -48,3 +48,6 @@ def process_motor_sub(db, table_name, data):
 
 def process_ro_plant_sub(db, table_name, data):
     return process_data(db, table_name, data, ['tds'])
+
+def process_water_flow_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['flowrate', 'totalflow'])
