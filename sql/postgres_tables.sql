@@ -43,6 +43,17 @@ CREATE TABLE oht1_waterlevel (
     distance FLOAT
 );
 
+CREATE TABLE oht_rop1_data (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    temperature FLOAT,
+    voltage FLOAT,
+    uncompensated_tds FLOAT,
+    compensated_tds FLOAT,
+	turbudity FLOAT,
+	ph Float
+);
+
 CREATE TABLE roplant1_data (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
