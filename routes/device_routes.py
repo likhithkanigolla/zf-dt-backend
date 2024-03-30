@@ -8,6 +8,10 @@ router = APIRouter()
 async def water_quality_sub(table_name: str, data: dict):
     return data_processing.process_water_quality_sub(db, table_name, data)
 
+@router.post("/rawwaterqualitysub/{table_name}")
+async def raw_water_quality_sub(table_name: str, data: dict):
+    return data_processing.process_raw_water_quality_sub(db, table_name, data)
+
 @router.post("/waterlevelsub/{table_name}")
 async def water_level_sub(table_name: str, data: dict):
     return data_processing.process_water_level_sub(db, table_name, data)

@@ -22,7 +22,12 @@ CREATE TABLE "WM-WD-KRB-M1" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     status FLOAT,
-    current FLOAT
+    voltage FLOAT,
+    current FLOAT,
+    power FLOAT,
+    energy FLOAT,
+    frequency FLOAT,
+    power_factor FLOAT
 );
 
 CREATE TABLE "WM-WF-KB04-70" (

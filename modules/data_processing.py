@@ -40,11 +40,15 @@ def process_data(db, table_name, data, column_order):
 def process_water_quality_sub(db, table_name, data):
     return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
 
+def process_raw_water_quality_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds', 'turbudity', 'ph'])
+
+
 def process_water_level_sub(db, table_name, data):
     return process_data(db, table_name, data, ['waterlevel', 'temperature'])
 
 def process_motor_sub(db, table_name, data):
-    return process_data(db, table_name, data, ['status', 'current'])
+    return process_data(db, table_name, data, ['status', 'voltage','current','power','energy','frequency','power_factor'])
 
 def process_ro_plant_sub(db, table_name, data):
     return process_data(db, table_name, data, ['tds'])
