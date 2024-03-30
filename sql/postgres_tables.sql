@@ -1,6 +1,6 @@
 -- Creation of Tables 
 
-CREATE TABLE sump1_wd_data (
+CREATE TABLE "WM-WD-KH98-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -11,28 +11,49 @@ CREATE TABLE sump1_wd_data (
 	ph Float
 );
 
-CREATE TABLE sump1_waterlevel (
+CREATE TABLE "WM-WL-KH98-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
     distance FLOAT
 );
 
-CREATE TABLE motor1_status (
+CREATE TABLE "WM-WD-KRB-M1" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     status FLOAT,
     current FLOAT
 );
 
-CREATE TABLE oht_krbadm_wf_data (
+CREATE TABLE "WM-WF-KB04-70" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
+
+CREATE TABLE "WM-WF-KB04-71" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
+
+CREATE TABLE "WM-WF-KB04-72" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
+
+CREATE TABLE "WM-WF-KB04-73" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     flowrate FLOAT,
     totalflow FLOAT
 );
  
-CREATE TABLE oht1_wd_data (
+CREATE TABLE "WM-WD-KH96-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -43,14 +64,14 @@ CREATE TABLE oht1_wd_data (
 	ph Float
 );
 
-CREATE TABLE oht1_waterlevel (
+CREATE TABLE "WM-WL-KH00-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
     distance FLOAT
 );
 
-CREATE TABLE oht_rop1_wd_data (
+CREATE TABLE "WM-WD-KH96-01" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -61,7 +82,7 @@ CREATE TABLE oht_rop1_wd_data (
 	ph Float
 );
 
-CREATE TABLE roplant1_wd_data (
+CREATE TABLE "WM-WD-KH04-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -76,7 +97,7 @@ CREATE TABLE roplant1_tds (
     tds FLOAT
 );
 
-CREATE TABLE ro1_wd_data (
+CREATE TABLE "WM-WD-KH01-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -85,7 +106,7 @@ CREATE TABLE ro1_wd_data (
     compensated_tds FLOAT
 );
 
-CREATE TABLE ro2_wd_data (
+CREATE TABLE "WM-WD-KH95-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
