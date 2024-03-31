@@ -35,11 +35,6 @@ def process_data(db, table_name, data, column_order):
         print('Data inserted successfully into table:', table_name)
         return {'message': 'Data received and inserted successfully.'}
     
-    except ValueError as ve:
-        # Handle ValueError exceptions
-        print('Error inserting data into PostgreSQL: %s', ve)
-        raise ValueError('Bad Request')
-    
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
