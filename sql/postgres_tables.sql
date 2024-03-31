@@ -14,8 +14,8 @@ CREATE TABLE "WM-WD-KH98-00" (
 CREATE TABLE "WM-WL-KH98-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
-    temperature FLOAT,
-    distance FLOAT
+    waterlevel FLOAT,
+    temperature FLOAT
 );
 
 CREATE TABLE "WM-WD-KRB-M1" (
@@ -72,8 +72,8 @@ CREATE TABLE "WM-WD-KH96-00" (
 CREATE TABLE "WM-WL-KH00-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
-    temperature FLOAT,
-    distance FLOAT
+    waterlevel FLOAT,
+    temperature FLOAT
 );
 
 CREATE TABLE "WM-WD-KH96-01" (
