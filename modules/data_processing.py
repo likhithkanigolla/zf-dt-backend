@@ -27,7 +27,7 @@ def process_data(db, table_name, data, column_order):
 
         db.cur.execute(
             insert_statement,
-            [timestamp] + [con_values[i] for i in range(len(column_order))]
+            [timestamp] + [con_values[i+1] for i in range(len(column_order))]
         )
         db.conn.commit()
 
