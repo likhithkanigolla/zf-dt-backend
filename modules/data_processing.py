@@ -62,15 +62,24 @@ def process_water_flow_sub(db, table_name, data):
 # Assuming this function is in a module named data_processing.py
 def get_real_time_data(db, table_name):
     try:
-        # SQL injection risk, ensure table_name is validated or sanitized
+        # SQL injection risk mitigation - Ensure table_name is validated or sanitized
+        # if table_name not in ['allowed_table_1', 'allowed_table_2']:
+        #     raise HTTPException(status_code=400, detail="Invalid table name")
+
         query = f'SELECT * FROM "{table_name}" LIMIT 1;'
         db.cur.execute(query)
         result = db.cur.fetchone()
+
         if result:
-            return {"value": result[0]}
+            # Fetching column names from cursor.description
+            columns = [col[0] for col in db.cur.description]
+            # Creating a dictionary {column_name: value}
+            data = dict(zip(columns, result))
+            return data
         else:
             raise HTTPException(status_code=404, detail="Value not found")
-    except Exception as e:  # Catching all exceptions for simplicity here
-        print(e)  # In real application, consider logging this exception
+    except Exception as e:
+        # In a real application, consider more specific exception handling and logging
+        print(e)
         raise HTTPException(status_code=500, detail="Database operation failed")
 
