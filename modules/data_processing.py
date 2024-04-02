@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from .models import SensorData
 import json
 
@@ -57,3 +58,19 @@ def process_ro_plant_sub(db, table_name, data):
 
 def process_water_flow_sub(db, table_name, data):
     return process_data(db, table_name, data, ['flowrate', 'totalflow'])
+
+# Assuming this function is in a module named data_processing.py
+def get_real_time_data(db, table_name):
+    try:
+        # SQL injection risk, ensure table_name is validated or sanitized
+        query = f'SELECT * FROM "{table_name}" LIMIT 1;'
+        db.cur.execute(query)
+        result = db.cur.fetchone()
+        if result:
+            return {"value": result[0]}
+        else:
+            raise HTTPException(status_code=404, detail="Value not found")
+    except Exception as e:  # Catching all exceptions for simplicity here
+        print(e)  # In real application, consider logging this exception
+        raise HTTPException(status_code=500, detail="Database operation failed")
+
