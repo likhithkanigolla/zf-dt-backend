@@ -66,7 +66,7 @@ def get_real_time_data(db, table_name):
         # if table_name not in ['allowed_table_1', 'allowed_table_2']:
         #     raise HTTPException(status_code=400, detail="Invalid table name")
 
-        query = f'SELECT * FROM "{table_name}" LIMIT 1;'
+        query = f'SELECT * FROM "{table_name}" ORDER BY timestamp DESC LIMIT 1;'
         db.cur.execute(query)
         result = db.cur.fetchone()
 
