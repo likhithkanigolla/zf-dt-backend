@@ -31,3 +31,6 @@ async def get_value(table_name: str):
     result = await run_in_threadpool(data_processing.get_real_time_data, db, table_name)
     return result
 
+@router.get("/predict_voltage/{soil_quantity}")
+async def predict_voltage(soil_quantity: int):
+    return data_processing.voltage_calculation(soil_quantity)

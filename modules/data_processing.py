@@ -1,5 +1,7 @@
 from fastapi import HTTPException
 from .models import SensorData
+from sklearn.linear_model import LinearRegression
+import numpy as np
 import json
 
 def process_data(db, table_name, data, column_order):
@@ -82,4 +84,30 @@ def get_real_time_data(db, table_name):
         # In a real application, consider more specific exception handling and logging
         print(e)
         raise HTTPException(status_code=500, detail="Database operation failed")
+
+def voltage_calculation(soil_quantity):
+    # Define the voltage data
+    voltage_data = {
+        0: 1.2,
+        100: 2.3,
+        200: 3.4,
+        300: 4.5,
+        400: 5.6,
+        500: 6.7,
+    }
+
+    # Prepare the data for training
+    X = np.array(list(voltage_data.keys())).reshape(-1, 1)
+    y = np.array(list(voltage_data.values()))
+
+    # Train the linear regression model
+    model = LinearRegression()
+    model.fit(X, y)
+
+    if 1 <= soil_quantity <= 500:
+        # Predict the voltage for the given soil quantity
+        predicted_voltage = model.predict([[soil_quantity]])
+        return {"predicted_voltage": predicted_voltage[0]}
+    else:
+        return {"error": "Soil quantity must be between 1 and 500 grams."}
 
