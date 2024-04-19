@@ -1,24 +1,6 @@
 -- Creation of Tables 
-
-CREATE TABLE "WM-WD-KH98-00" (
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	creationtime TIMESTAMP WITH TIME ZONE,
-    temperature FLOAT,
-    voltage FLOAT,
-    uncompensated_tds FLOAT,
-    compensated_tds FLOAT,
-	turbudity FLOAT,
-	ph Float
-);
-
-CREATE TABLE "WM-WL-KH98-00" (
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	creationtime TIMESTAMP WITH TIME ZONE,
-    waterlevel FLOAT,
-    temperature FLOAT
-);
-
-CREATE TABLE "WM-WD-KRB-M1" (
+-- Motor Node SQL Statements
+CREATE TABLE "DM-KH98-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     status FLOAT,
@@ -30,6 +12,7 @@ CREATE TABLE "WM-WD-KRB-M1" (
     power_factor FLOAT
 );
 
+-- Water Flow Node SQL Statements
 CREATE TABLE "WM-WF-KB04-70" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
@@ -57,8 +40,26 @@ CREATE TABLE "WM-WF-KB04-73" (
     flowrate FLOAT,
     totalflow FLOAT
 );
- 
-CREATE TABLE "WM-WD-KH96-00" (
+
+-- Water Level Nodes 
+CREATE TABLE "WM-WL-KH00-00" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    waterlevel FLOAT,
+    temperature FLOAT
+);
+
+CREATE TABLE "WM-WL-KH98-00" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    waterlevel FLOAT,
+    temperature FLOAT
+);
+
+
+-- Water Quality / Water Distribution
+-- Nodes with pH and turbudity
+CREATE TABLE "WM-WD-KH98-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     temperature FLOAT,
@@ -69,11 +70,15 @@ CREATE TABLE "WM-WD-KH96-00" (
 	ph Float
 );
 
-CREATE TABLE "WM-WL-KH00-00" (
+CREATE TABLE "WM-WD-KH96-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
-    waterlevel FLOAT,
-    temperature FLOAT
+    temperature FLOAT,
+    voltage FLOAT,
+    uncompensated_tds FLOAT,
+    compensated_tds FLOAT,
+	turbudity FLOAT,
+	ph Float
 );
 
 CREATE TABLE "WM-WD-KH96-01" (
@@ -87,6 +92,7 @@ CREATE TABLE "WM-WD-KH96-01" (
 	ph Float
 );
 
+-- Nodes without pH and turbudity
 CREATE TABLE "WM-WD-KH04-00" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
@@ -94,12 +100,6 @@ CREATE TABLE "WM-WD-KH04-00" (
     voltage FLOAT,
     uncompensated_tds FLOAT,
     compensated_tds FLOAT
-);
-
-CREATE TABLE roplant1_tds (
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	creationtime TIMESTAMP WITH TIME ZONE,
-    tds FLOAT
 );
 
 CREATE TABLE "WM-WD-KH01-00" (
@@ -127,4 +127,10 @@ CREATE TABLE ro3_wd_data (
     voltage FLOAT,
     uncompensated_tds FLOAT,
     compensated_tds FLOAT
+);
+
+CREATE TABLE roplant1_tds (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	creationtime TIMESTAMP WITH TIME ZONE,
+    tds FLOAT
 );
