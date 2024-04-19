@@ -7,7 +7,7 @@ model_temp = joblib.load('linear_regression_model_temp.pkl')
 model_voltage = joblib.load('linear_regression_model_voltage.pkl')
 
 # Prepare input data
-quantity_input = 500  # Example quantity value
+quantity_input = 962  # Example quantity value
 
 # Make predictions for temperature
 temp_prediction = model_temp.predict([[quantity_input]])
