@@ -1,6 +1,6 @@
 -- Creation of Tables 
 -- Motor Node SQL Statements
-CREATE TABLE "DM-KH98-00" (
+CREATE TABLE "DM-KH98-60" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	creationtime TIMESTAMP WITH TIME ZONE,
     status FLOAT,
@@ -11,6 +11,8 @@ CREATE TABLE "DM-KH98-00" (
     frequency FLOAT,
     power_factor FLOAT
 );
+
+
 
 -- Water Flow Node SQL Statements
 CREATE TABLE "WM-WF-KB04-70" (
