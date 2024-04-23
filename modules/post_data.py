@@ -19,4 +19,4 @@ def post_to_onem2m_act(node_type, node_name, status):
         'Content-Type': 'application/json;ty=4'
     }
     response = requests.post(url, headers=headers, data=payload)
-    return response.text
+    return response.status_code
