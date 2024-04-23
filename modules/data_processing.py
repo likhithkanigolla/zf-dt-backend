@@ -61,6 +61,9 @@ def process_ro_plant_sub(db, table_name, data):
 def process_water_flow_sub(db, table_name, data):
     return process_data(db, table_name, data, ['flowrate', 'totalflow'])
 
+def process_node_act_sub(db, table_name, data):
+    return process_data(db, table_name, data, ['node_type', 'status'])
+
 # Assuming this function is in a module named data_processing.py
 def get_real_time_data(db, table_name):
     try:

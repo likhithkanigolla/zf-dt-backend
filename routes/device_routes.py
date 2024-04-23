@@ -24,8 +24,13 @@ async def motor_sub(table_name: str, data: dict):
     return data_processing.process_motor_sub(db, table_name, data)
 
 @router.post("/waterflowsub/{table_name}")
-async def motor_sub(table_name: str, data: dict):
+async def water_flow_sub(table_name: str, data: dict):
     return data_processing.process_water_flow_sub(db, table_name, data)
+
+@router.post("/actuationsub/{table_name}")
+async def node_act_sub(table_name: str, data: dict):
+    return post_data.process_node_act_sub(db, table_name, data)
+    
 
 # Actuations
 @router.post("/actuation/{node_type}/{node_name}/{status}")
