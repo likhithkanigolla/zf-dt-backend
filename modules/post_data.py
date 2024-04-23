@@ -1,6 +1,7 @@
 import json
 import requests
 import time
+# from config.settings import *
 
 BACKEND_URL="http://onem2m.iiit.ac.in:443/~/in-cse/in-name/AE-DM/"
 
@@ -20,3 +21,4 @@ def post_to_onem2m_act(node_type, node_name, status):
     }
     response = requests.post(url, headers=headers, data=payload)
     return response.status_code
+# print(DATABASE_URL)
