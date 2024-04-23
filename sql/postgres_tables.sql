@@ -14,8 +14,8 @@ CREATE TABLE "DM-KH98-60" (
 -- Status and Actuation
 CREATE TABLE "DM-KH98-80" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	creationtime TIMESTAMP WITH TIME ZONE,
-	node_type character varying,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    node_type VARCHAR,
     status INTEGER
 );
 
