@@ -29,7 +29,7 @@ mse_temp = mean_squared_error(y_test_temp, y_pred_temp)
 print("Mean Squared Error for Temp Prediction:", mse_temp)
 
 # Save the trained model for temperature prediction
-joblib.dump(model_temp, 'linear_regression_model_temp.pkl')
+joblib.dump(model_temp, 'linear_regression_model_sand_temperature.pkl')
 
 # Split the data into training and testing sets for voltage prediction
 X_train_voltage, X_test_voltage, y_train_voltage, y_test_voltage = train_test_split(X, y_voltage, test_size=0.2, random_state=42)
@@ -46,4 +46,4 @@ mse_voltage = mean_squared_error(y_test_voltage, y_pred_voltage)
 print("Mean Squared Error for Voltage Prediction:", mse_voltage)
 
 # Save the trained model for voltage prediction
-joblib.dump(model_voltage, 'linear_regression_model_voltage.pkl')
+joblib.dump(model_voltage, 'linear_regression_model_sand_voltage.pkl')
