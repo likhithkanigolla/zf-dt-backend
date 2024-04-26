@@ -41,6 +41,47 @@ def process_data(db, table_name, data, column_order):
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
+    
+def process_str_data(db, table_name, data, column_order):
+    try:
+        # Extract data from the received JSON
+        cin = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('con', None)
+        if cin is None:
+            raise ValueError('Invalid request format. Missing "con" field.')
+        print("Received con:", type(cin), cin.replace("'",""))
+        # con_values = json.loads(cin.replace("'",""))
+        con_values = cin.strip('[]').split(',')
+        con_values = [val.strip() if val.strip().isdigit() else f'"{val.strip()}"' for val in con_values]
+        json_data = json.loads('[' + ', '.join(con_values) + ']')
+
+        
+
+        if any(map(lambda x: x != x, con_values)):
+            raise ValueError('Invalid con values. Please check the format.')
+        creation_time = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('ct', None)
+        if creation_time is None:
+            raise ValueError('Invalid request format. Missing "ct" field.')
+
+        timestamp = creation_time.replace('T', ' ').replace('Z', '')
+        insert_statement = f"""
+            INSERT INTO "{table_name}" 
+            (creationtime, {', '.join(column_order)}) 
+            VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
+        """
+
+        db.cur.execute(
+            insert_statement,
+            [timestamp] + [con_values[i+1] for i in range(len(column_order))]
+        )
+        db.conn.commit()
+
+        print('Data inserted successfully into table:', table_name)
+        return {'message': 'Data received and inserted successfully.'}
+    
+    except Exception as e:
+        print('Error inserting data into PostgreSQL:', str(e))
+        raise ValueError('Internal Server Error')
+
 
 def process_water_quality_sub(db, table_name, data):
     return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
@@ -62,7 +103,7 @@ def process_water_flow_sub(db, table_name, data):
     return process_data(db, table_name, data, ['flowrate', 'totalflow'])
 
 def process_node_act_sub(db, table_name, data):
-    return process_data(db, table_name, data, ['node_type', 'status'])
+    return process_str_data(db, table_name, data, ['node_type', 'status'])
 
 # Assuming this function is in a module named data_processing.py
 def get_real_time_data(db, table_name):

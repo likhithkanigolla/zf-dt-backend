@@ -16,6 +16,7 @@ y_voltage = df["Voltage"]
 
 # Split the data into training and testing sets for temperature prediction
 X_train_temp, X_test_temp, y_train_temp, y_test_temp = train_test_split(X, y_temp, test_size=0.2, random_state=42)
+print("X Train Temp:",X_train_temp)
 
 # Train the Linear Regression model for temperature prediction
 model_temp = LinearRegression()
