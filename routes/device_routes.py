@@ -31,6 +31,10 @@ async def water_flow_sub(table_name: str, data: dict):
 async def node_act_sub(table_name: str, data: dict):
     return data_processing.process_node_act_sub(db, table_name, data)
     
+@router.post("/calibdata/")
+async def node_act_sub(data: dict):
+    return data_processing.process_calibdata(db, data)
+    
 
 # Actuations
 @router.post("/actuation/{node_type}/{node_name}/{status}")

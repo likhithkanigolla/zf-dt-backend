@@ -82,6 +82,28 @@ def process_str_data(db, table_name, data, column_order):
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
 
+def process_calibdata(db, data):
+    node = data.get('node')
+    temperature = data.get('temperature')
+    tds = data.get('tds')
+
+    try:
+        # Execute the SQL query to insert data into the table
+        db.cur.execute(
+            "INSERT INTO calibdata (node, temperature, tds) VALUES (%s, %s, %s)",
+            (node, temperature, tds)
+        )
+        
+        # Commit the transaction
+        db.conn.commit()
+        
+        return {"message": "Data inserted successfully"}
+    except Exception as e:
+        # Rollback the transaction if an error occurs
+        db.conn.rollback()
+        return {"error": str(e)}
+
+
 
 def process_water_quality_sub(db, table_name, data):
     return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
