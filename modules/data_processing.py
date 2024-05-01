@@ -86,12 +86,13 @@ def process_calibdata(db, data):
     node = data.get('node')
     temperature = data.get('temperature')
     tds = data.get('tds')
+    ph = data.get('ph')
 
     try:
         # Execute the SQL query to insert data into the table
         db.cur.execute(
-            "INSERT INTO calibdata (node, temperature, tds) VALUES (%s, %s, %s)",
-            (node, temperature, tds)
+            "INSERT INTO calibdata (node, temperature, tds, ph) VALUES (%s, %s, %s, %s)",
+            (node, temperature, tds, ph)
         )
         
         # Commit the transaction
