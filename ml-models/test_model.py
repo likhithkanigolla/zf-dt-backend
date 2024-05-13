@@ -1,26 +1,29 @@
 import joblib
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import StandardScaler
+import numpy as np
 
-# Load the trained model for temperature prediction
-model_temp = joblib.load('linear_regression_model_temp.pkl')
+# Load the trained model from the file
+loaded_model = joblib.load("polynomial_regression_model.pkl")
 
-# Load the trained model for voltage prediction
-model_voltage = joblib.load('linear_regression_model_voltage.pkl')
+# Define the polynomial features transformer
+degree = 3
+poly_features = PolynomialFeatures(degree=degree)
 
-# Prepare input data
-quantity_input = 962  # Example quantity value
+# Load the scaler used for scaling the target variable during training
+target_scaler = joblib.load("target_scaler.pkl")
 
-# Make predictions for temperature
-temp_prediction = model_temp.predict([[quantity_input]])
+# Take input from the user for prediction
+input_features = np.array([30, 1, 100]).reshape(1, -1)
 
-# Make predictions for voltage
-voltage_prediction = model_voltage.predict([[quantity_input]])
+# Transform the input features using polynomial features
+input_features_poly = poly_features.transform(input_features)
 
-# Print predictions
-print("Predicted Temp:", temp_prediction)
-print("Predicted Voltage:", voltage_prediction)
+# Make predictions using the loaded model
+predicted_value_scaled = loaded_model.predict(input_features_poly)
 
-# Compare with actual values if available
-# actual_temp = ...
-# actual_voltage = ...
-# print("Actual Temp:", actual_temp)
-# print("Actual Voltage:", actual_voltage)
+# Unscaled the predicted value
+predicted_value = target_scaler.inverse_transform(predicted_value_scaled.reshape(-1, 1))
+
+# Print the predicted value
+print("Predicted value:", predicted_value)
