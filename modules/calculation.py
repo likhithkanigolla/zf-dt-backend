@@ -25,18 +25,38 @@ C= 1.92 #
 
 # Calculation functions
 def calculate_osmotic_pressure(C):
+    """
+    Calculate osmotic pressure using the formula:
+    π = i * C * R * T
+    """
     return i * C * R * T
 
 def calculate_water_flux(P, delta_P, mu, L):
+    """
+    Calculate water flux using the formula:
+    J = L * (P - ΔP) / μ
+    """
     return L * (P - delta_P) / mu
 
 def calculate_permeate_flow_rate(A, water_flux):
+    """
+    Calculate permeate flow rate using the formula:
+    Q = A * J
+    """
     return A * water_flux
 
 def calculate_tds_reduction(initial_tds, tds_reduction_rate):
+    """
+    Calculate TDS reduction using the formula:
+    TDS_final = TDS_initial * (1 - TDS_reduction_rate)
+    """
     return initial_tds * (1 - tds_reduction_rate)
 
 def calculate_tds(voltage, temperature):
+    """
+    Calculate TDS using the formula:
+    TDS = 133.42 * (CV ** 3) - 255.86 * (CV ** 2) + 857.39 * CV * 0.5
+    """
     CV = voltage / (1.0 + 0.02 * (temperature - 25))
     return 133.42 * (CV ** 3) - 255.86 * (CV ** 2) + 857.39 * CV * 0.5
 
