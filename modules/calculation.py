@@ -1,4 +1,6 @@
-from .models import ROFiltrationRequest
+from .models import ROFiltrationRequest, SoilContaminationRequest
+from sklearn.preprocessing import StandardScaler
+import numpy as np
 import math
 
 # Constants
@@ -110,3 +112,16 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
         "cycle_count": cycle_count,
         "time_estimation_hours": time_estimation_hours
     }
+
+def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, soil_scaler):
+    input_data = [params.temperature, params.WaterQuanity, params.SoilQuantiy]
+    input_features = np.array(input_data).reshape(1, -1)
+
+    # Use the fitted scaler to transform the new data
+    input_features_scaled = soil_scaler.transform(input_features)
+    # print(f"Scaled features: {input_features_scaled}")  # Debug print
+
+    # Use the loaded model to make predictions on the scaled data
+    predictions = soil_model.predict(input_features_scaled)
+
+    return predictions.tolist()[0]
