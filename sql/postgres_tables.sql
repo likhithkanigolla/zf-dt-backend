@@ -1,4 +1,5 @@
 -- Creation of Tables 
+--Added IF Not Exists to avoid errors when creating tables that already exist
 -- Motor Node SQL Statements
 CREATE TABLE IF NOT EXISTS "DM-KH98-60" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
