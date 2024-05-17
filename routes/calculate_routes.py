@@ -1,6 +1,7 @@
 from fastapi import APIRouter,Depends
 from modules.models import SimulationInput, ROFiltrationRequest, SoilContaminationRequest
 from modules.calculation import calculate_ro_filtration, calculate_soil_contamination
+from modules import data_processing
 from modules.ml_models import get_soil_module
 
 router = APIRouter()
@@ -22,6 +23,19 @@ def calculate_ro_filtration_pass(params: ROFiltrationRequest):
     :return: Dictionary with the calculated reverse osmosis filtration
     """
     return calculate_ro_filtration(params)
+
+@router.get("/predict_voltage/{soil_quantity}")
+async def predict_voltage(soil_quantity: int):
+    """
+    Predict voltage based on soil quantity.
+
+    Args:
+        soil_quantity (int): The quantity of soil.
+
+    Returns:
+        dict: The predicted voltage.
+    """
+    return data_processing.voltage_calculation(soil_quantity)
 
 @router.post("/calculate_soil_contamination")
 def calculate_soil_contamination_pass(params: SoilContaminationRequest, soil_module=Depends(get_soil_module)):

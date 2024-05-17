@@ -79,7 +79,7 @@ async def water_flow_sub(table_name: str, data: dict):
 @router.post("/actuationsub/{table_name}")
 async def node_act_sub(table_name: str, data: dict):
     """
-    Subscribe to node actuation data updates.
+    Subscribe to node actuation data updates.This helps to store the actuations from onem2m to the dataabse.
 
     Args:
         table_name (str): The name of the table to subscribe to.
@@ -90,18 +90,6 @@ async def node_act_sub(table_name: str, data: dict):
     """
     return data_processing.process_node_act_sub(db, table_name, data)
     
-@router.post("/calibdata/")
-async def node_act_sub(data: dict):
-    """
-    Process calibration data.
-
-    Args:
-        data (dict): The calibration data to process.
-
-    Returns:
-        dict: The processed data.
-    """
-    return data_processing.process_calibdata(db, data)
     
 
 @router.post("/actuation/{node_type}/{node_name}/{status}")
@@ -119,29 +107,3 @@ async def node_act(node_type: str,node_name: str, status: str):
     """
     return post_data.post_to_onem2m_act(node_type , node_name, status)
 
-@router.get("/get_value")
-async def get_value(table_name: str):
-    """
-    Get real-time data.
-
-    Args:
-        table_name (str): The name of the table to fetch data from.
-
-    Returns:
-        dict: The fetched data.
-    """
-    result = await run_in_threadpool(data_processing.get_real_time_data, db, table_name)
-    return result
-
-@router.get("/predict_voltage/{soil_quantity}")
-async def predict_voltage(soil_quantity: int):
-    """
-    Predict voltage based on soil quantity.
-
-    Args:
-        soil_quantity (int): The quantity of soil.
-
-    Returns:
-        dict: The predicted voltage.
-    """
-    return data_processing.voltage_calculation(soil_quantity)
