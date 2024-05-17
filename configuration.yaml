@@ -1,0 +1,7 @@
+# configuration.yml
+
+models:
+  - name: soil_impurity_model
+    path: modules/data_models/soil_XGBoost.pkl
+  - name: soil_impurity_scaler
+    path: modules/data_models/soil_scaler.pkl
