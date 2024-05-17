@@ -1,6 +1,6 @@
 from .models import ROFiltrationRequest, SoilContaminationRequest
 from sklearn.preprocessing import StandardScaler
-import numpy as np
+import pandas as pd
 import math
 
 # Constants
@@ -115,11 +115,13 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
 
 def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, soil_scaler):
     input_data = [params.temperature, params.WaterQuanity, params.SoilQuantiy]
-    input_features = np.array(input_data).reshape(1, -1)
+    feature_names = ['Temp', 'Quantity', 'Soil '] # Feature names used in the model at the time of training
+
+    # Create a DataFrame from the input data
+    input_features = pd.DataFrame([input_data], columns=feature_names)
 
     # Use the fitted scaler to transform the new data
     input_features_scaled = soil_scaler.transform(input_features)
-    # print(f"Scaled features: {input_features_scaled}")  # Debug print
 
     # Use the loaded model to make predictions on the scaled data
     predictions = soil_model.predict(input_features_scaled)
