@@ -67,6 +67,11 @@ def calculate_simulation(input_data):
     return {"result": result}
 
 def calculate_ro_filtration(params: ROFiltrationRequest):
+    """
+    Calculate the reverse osmosis filtration based on the input parameters
+    :param params: ROFiltrationRequest
+    :return: Dictionary with the calculated reverse osmosis filtration
+    """
     initial_tds = params.initial_tds
     desired_tds = params.desired_tds
     P = params.applied_pressure
@@ -114,8 +119,16 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     }
 
 def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, soil_scaler):
+    """
+    Calculate the soil contamination based on the input parameters
+    :param params: SoilContaminationRequest
+    :param soil_model: The loaded machine learning model for soil contamination
+    :param soil_scaler: The scaler used for preprocessing soil data
+    :return: Dictionary with the calculated soil contamination
+    """
     input_data = [params.temperature, params.WaterQuanity, params.SoilQuantiy]
-    feature_names = ['Temp', 'Quantity', 'Soil '] # Feature names used in the model at the time of training
+    feature_names = ['Temp', 'Quantity', 'Soil '] 
+    # Feature names used in the model at the time of training
 
     # Create a DataFrame from the input data
     input_features = pd.DataFrame([input_data], columns=feature_names)
