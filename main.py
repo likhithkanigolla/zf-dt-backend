@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Database connection initialization
-db = database.Database()
+db = database
 
 # Include routers from different modules
 app.include_router(general_router, prefix="", tags=["General Routes"])
