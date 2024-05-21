@@ -85,7 +85,7 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     volume_of_water = params.sump_capacity
     print("Volume of the water:", volume_of_water)
     
-    initial_tds=calculate_tds(voltage,temperature)
+    # initial_tds=calculate_tds(voltage,temperature)
 
     max_iterations = 10
     cycle_count = 0
@@ -98,22 +98,24 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
         permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
         time_estimation_hours = volume_of_water / permeate_flow_rate
         tds_reduction_rate = 0.70
-        print("initial TDS", initial_tds)
-        tds_final = calculate_tds_reduction(initial_tds, tds_reduction_rate)
-        initial_tds = tds_final
+        initial_tds_temp = initial_tds
+        print("initial TDS Temp:", initial_tds_temp)
+        tds_final = calculate_tds_reduction(initial_tds_temp, tds_reduction_rate)
+        initial_tds_temp = tds_final
 
         print(cycle_count,tds_final)
         if desired_tds >= tds_final:
             break
 
-    tds_calculated = calculate_tds(voltage, temperature)
+    # tds_calculated = calculate_tds(voltage, temperature)
+    print("initial TDS", initial_tds)
 
     return {
         "osmotic_pressure": osmotic_pressure,
         "water_flux": water_flux,
         "permeate_flow_rate": permeate_flow_rate,
         "final_tds_concentration_after_ro_tank": tds_final,
-        "calculated_tds_value": tds_calculated,
+        "calculated_tds_value": initial_tds,
         "cycle_count": cycle_count,
         "time_estimation_hours": time_estimation_hours
     }
@@ -126,7 +128,7 @@ def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, s
     :param soil_scaler: The scaler used for preprocessing soil data
     :return: Dictionary with the calculated soil contamination
     """
-    input_data = [params.temperature, params.WaterQuanity, params.SoilQuantiy]
+    input_data = [params.temperature, params.sumpCapacity, params.SoilQuantiy]
     feature_names = ['Temp', 'Quantity', 'Soil '] 
     # Feature names used in the model at the time of training
 
