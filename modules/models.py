@@ -29,3 +29,8 @@ class SoilContaminationRequest(BaseModel):
     temperature: float = 27.125
     sumpCapacity: float = 6000
     SoilQuantiy: float = 200
+    
+class SandContaminationRequest(BaseModel):
+    temperature: float = 27.125
+    sumpCapacity: float = 6000
+    SandQuantiy: float = 200

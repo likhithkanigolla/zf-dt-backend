@@ -1,11 +1,12 @@
 from fastapi import APIRouter,Depends
-from modules.models import SimulationInput, ROFiltrationRequest, SoilContaminationRequest
-from modules.calculation import calculate_ro_filtration, calculate_soil_contamination
+from modules.models import SimulationInput, ROFiltrationRequest, SoilContaminationRequest, SandContaminationRequest
+from modules.calculation import calculate_ro_filtration, calculate_soil_contamination, calculate_sand_contamination
 from modules import data_processing
-from modules.ml_models import load_soil_module
+from modules.ml_models import load_soil_module, load_sand_module
 
 # Load the machine learning model and scaler
 soil_model, soil_scaler = load_soil_module()
+sand_model, sand_scaler = load_sand_module()
 router = APIRouter()
 
 @router.post("/calculate")
@@ -49,3 +50,14 @@ def calculate_soil_contamination_pass(params: SoilContaminationRequest, soil_mod
     :return: Dictionary with the calculated soil contamination
     """
     return calculate_soil_contamination(params, soil_model, soil_scaler)
+
+@router.post("/calculate_sand_contamination")
+def calculate_soil_contamination_pass(params: SandContaminationRequest, sand_model=sand_model, sand_scaler=sand_scaler):
+    """
+    Calculate the sand contamination based on the input parameters
+    :param params: SandContaminationRequest
+    :param sand_model: The loaded machine learning model for sand contamination
+    :param sand_scaler: The scaler used for preprocessing sand data
+    :return: Dictionary with the calculated sand contamination
+    """
+    return calculate_sand_contamination(params, sand_model, sand_scaler)

@@ -1,4 +1,4 @@
-from .models import ROFiltrationRequest, SoilContaminationRequest
+from .models import ROFiltrationRequest, SoilContaminationRequest, SandContaminationRequest
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import math
@@ -140,5 +140,28 @@ def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, s
 
     # Use the loaded model to make predictions on the scaled data
     predictions = soil_model.predict(input_features_scaled)
+
+    return predictions.tolist()[0]
+
+def calculate_sand_contamination(params: SandContaminationRequest, sand_model, sand_scaler):
+    """
+    Calculate the sand contamination based on the input parameters
+    :param params: SandContaminationRequest
+    :param sand_model: The loaded machine learning model for sand contamination
+    :param sand_scaler: The scaler used for preprocessing sand data
+    :return: Dictionary with the calculated sand contamination
+    """
+    input_data = [params.temperature, params.sumpCapacity, params.SandQuantiy]
+    feature_names = ['Temp', 'Quantity', 'Sand'] 
+    # Feature names used in the model at the time of training
+
+    # Create a DataFrame from the input data
+    input_features = pd.DataFrame([input_data], columns=feature_names)
+
+    # Use the fitted scaler to transform the new data
+    input_features_scaled = sand_scaler.transform(input_features)
+
+    # Use the loaded model to make predictions on the scaled data
+    predictions = sand_model.predict(input_features_scaled)
 
     return predictions.tolist()[0]

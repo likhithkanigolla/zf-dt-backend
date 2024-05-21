@@ -5,3 +5,7 @@ models:
     path: modules/data_models/soil_XGBoost.pkl
   - name: soil_impurity_scaler
     path: modules/data_models/soil_scaler.pkl
+  - name: sand_impurity_model
+    path: modules/data_models/sand_RandomForest.pkl
+  - name: sand_impurity_scaler
+    path: modules/data_models/sand_scaler.pkl
