@@ -9,7 +9,7 @@ def load_soil_module():
     root_dir = os.path.dirname(root_dir)  # Get the parent directory
     # print("Root directory: ", root_dir)
     config_path = os.path.join(root_dir, 'configuration.yaml')
-    # print("Config path: ", config_path)
+    print("Config path: ", config_path)
     # Read the configuration file and extract the file paths
     with open(config_path, 'r') as config_file:
         config_data = yaml.load(config_file, Loader=yaml.SafeLoader)  # Assuming configuration.yaml is in YAML format
