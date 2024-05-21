@@ -4,7 +4,10 @@ from dotenv import load_dotenv
 
 class Database:
     def __init__(self):
-        dotenv_path = os.path.join(os.path.dirname(__file__), './config', '.env')
+        dotenv_path = os.path.dirname(__file__)
+        dotenv_path=os.path.dirname(dotenv_path)
+        dotenv_path = os.path.join(dotenv_path, '.env')
+        print("ENV PATH: ", dotenv_path)
         load_dotenv(dotenv_path)
         # Define your PostgreSQL connection parameters
         self.DB_NAME = os.getenv('DB_NAME')
@@ -12,7 +15,7 @@ class Database:
         self.DB_PASSWORD = os.getenv('DB_PASSWORD')
         self.DB_HOST = os.getenv('DB_HOST')
         self.DB_PORT = os.getenv('DB_PORT')
-
+        print(f"Environment variables loaded successfully:\nDB_NAME={self.DB_NAME}\nDB_USER={self.DB_USER}\nDB_PASSWORD={self.DB_PASSWORD}\nDB_HOST={self.DB_HOST}\nDB_PORT={self.DB_PORT}")
         # Connect to PostgreSQL
         self.conn = psycopg2.connect(
             dbname=self.DB_NAME,
