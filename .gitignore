@@ -26,6 +26,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 *.pkl
+*.tflite
+!/modules/data_models/*.pkl
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
