@@ -27,5 +27,5 @@ class ROFiltrationRequest(BaseModel):
 
 class SoilContaminationRequest(BaseModel):
     temperature: float = 27.125
-    WaterQuanity: float = 2
+    sumpCapacity: float = 6000
     SoilQuantiy: float = 200
