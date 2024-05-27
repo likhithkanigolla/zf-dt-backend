@@ -18,7 +18,8 @@ async def node_act_sub(data: dict):
     Returns:
         dict: The processed data.
     """
-    return data_processing.process_calibdata(db, data)
+    result = await run_in_threadpool(data_processing.process_calibdata(db, data))
+    return result
 
 @router.get("/get_value")
 async def get_value(table_name: str):
