@@ -8,6 +8,8 @@ from .models import SensorData
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import json
+import psycopg2
+from psycopg2 import Error
 
 def process_data(db, table_name, data, column_order):
     """
@@ -49,14 +51,19 @@ def process_data(db, table_name, data, column_order):
             (creationtime, {', '.join(column_order)}) 
             VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
         """
-        db.cur.execute(
+        try:
+            db.cur.execute(
             insert_statement,
             [timestamp] + [con_values[i+1] for i in range(len(column_order))]
-        )
-        db.conn.commit()
-        print('Data inserted successfully into table:', table_name)
-        return {'message': 'Data received and inserted successfully.'}
-    
+            )
+            db.conn.commit()
+            print('Data inserted successfully into table:', table_name)
+            return {'message': 'Data received and inserted successfully.'}
+        except psycopg2.errors.InFailedSqlTransaction as e:
+            print('Error inserting data into PostgreSQL:', str(e))
+            db.conn.rollback()
+            db.reset_connection()  # Reset the database connection
+            return {'message': 'DB Connection Reset successfully.'}
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
@@ -102,15 +109,19 @@ def process_str_data(db, table_name, data, column_order):
             VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
         """
 
-        db.cur.execute(
+        try:
+            db.cur.execute(
             insert_statement,
             [timestamp] + [con_values[i+1].replace("'", "").replace('"', '') for i in range(len(column_order))]
-        )
-        db.conn.commit()
-
-        print('Data inserted successfully into table:', table_name)
-        return {'message': 'Data received and inserted successfully.'}
-    
+            )
+            db.conn.commit()
+            print('Data inserted successfully into table:', table_name)
+            return {'message': 'Data received and inserted successfully.'}
+        except psycopg2.errors.InFailedSqlTransaction as e:
+            print('Error inserting data into PostgreSQL:', str(e))
+            db.conn.rollback()
+            db.reset_connection()  # Reset the database connection
+            return {'message': 'DB Connection Reset successfully.'}
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
@@ -141,11 +152,14 @@ def process_calibdata(db, data):
             "INSERT INTO calibdata (node, temperature, tds, ph) VALUES (%s, %s, %s, %s)",
             (node, temperature, tds, ph)
         )
-        
         # Commit the transaction
         db.conn.commit()
-        
         return {"message": "Data inserted successfully"}
+    except psycopg2.errors.InFailedSqlTransaction as e:
+        print('Error inserting data into PostgreSQL:', str(e))
+        db.conn.rollback()
+        db.reset_connection()  # Reset the database connection
+        return {'message': 'DB Connection Reset successfully.'}
     except Exception as e:
         # Rollback the transaction if an error occurs
         db.conn.rollback()
@@ -297,8 +311,7 @@ def get_real_time_data(db, table_name):
 
     """
     try:
-        # SQL injection risk mitigation - Ensure table_name is validated or sanitized
-
+        #SQL injection risk mitigation - Ensure table_name is validated or sanitized
         # if table_name not in ['allowed_table_1', 'allowed_table_2']:
         #     raise HTTPException(status_code=400, detail="Invalid table name")
         query = f'SELECT * FROM "{table_name}" ORDER BY timestamp DESC LIMIT 1;'
@@ -312,6 +325,11 @@ def get_real_time_data(db, table_name):
             return data
         else:
             raise HTTPException(status_code=404, detail="Value not found")
+    except psycopg2.errors.InFailedSqlTransaction as e:
+        print('Error inserting data into PostgreSQL:', str(e))
+        db.conn.rollback()
+        db.reset_connection()  # Reset the database connection
+        return {'message': 'DB Connection Reset successfully.'}
     except Exception as e:
         # In a real application, consider more specific exception handling and logging
         print(e)
