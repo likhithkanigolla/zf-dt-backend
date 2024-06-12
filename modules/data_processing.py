@@ -326,7 +326,7 @@ def get_real_time_data(db, table_name):
         else:
             raise HTTPException(status_code=404, detail="Value not found")
     except psycopg2.errors.InFailedSqlTransaction as e:
-        print('Error inserting data into PostgreSQL:', str(e))
+        print('Error fetching data into PostgreSQL:', str(e))
         db.conn.rollback()
         db.reset_connection()  # Reset the database connection
         return {'message': 'DB Connection Reset successfully.'}
