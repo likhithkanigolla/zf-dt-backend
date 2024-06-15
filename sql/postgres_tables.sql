@@ -66,6 +66,19 @@ CREATE TABLE IF NOT EXISTS "WM-WL-KH98-00" (
     temperature FLOAT
 );
 
+CREATE TABLE IF NOT EXISTS "WM-WF-KH98-40" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
+CREATE TABLE IF NOT EXISTS "WM-WF-KH95-40" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    flowrate FLOAT,
+    totalflow FLOAT
+);
+
 
 -- Water Quality / Water Distribution
 -- Nodes with pH and turbidity
