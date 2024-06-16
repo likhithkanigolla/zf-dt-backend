@@ -1,4 +1,4 @@
-from .models import ROFiltrationRequest, SoilContaminationRequest, SandContaminationRequest
+from .models import ROFiltrationRequest, SoilContaminationRequest, SandContaminationRequest, MotorFlowRateRequest
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import math
@@ -45,7 +45,7 @@ def calculate_permeate_flow_rate(A, water_flux):
     Calculate permeate flow rate using the formula:
     Q = A * J
     """
-    return A * water_flux
+    return (A * water_flux)/1000 #Converting to liters per minute
 
 def calculate_tds_reduction(initial_tds, tds_reduction_rate):
     """
@@ -84,6 +84,7 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     temperature = params.temperature
     volume_of_water = params.sump_capacity
     print("Volume of the water:", volume_of_water)
+    print("type of desired", type(desired_tds), desired_tds)
     
     # initial_tds=calculate_tds(voltage,temperature)
 
@@ -98,6 +99,7 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
         permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
         time_estimation_hours = volume_of_water / permeate_flow_rate
         tds_reduction_rate = 0.70
+        # print(initial_tds_temp)
         initial_tds_temp = initial_tds
         print("initial TDS Temp:", initial_tds_temp)
         tds_final = calculate_tds_reduction(initial_tds_temp, tds_reduction_rate)
@@ -119,6 +121,20 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
         "cycle_count": cycle_count,
         "time_estimation_hours": time_estimation_hours
     }
+
+def motor_flow_rate(params: MotorFlowRateRequest):
+    voltage = params.voltage
+    current = params.current
+    power_factor = params.power_factor
+    motor_efficiency = params.motor_efficiency
+    depth  = params.depth
+    
+    power_input = voltage * current * (math.sqrt(3)) * power_factor
+    p_mechanical = power_input * motor_efficiency
+    p_hydraulic = p_mechanical
+    flowrate = p_hydraulic / (1000 * 9.81 * depth)
+    flowrate_lpm = flowrate * 1000 #Converting to liters per minute
+    return {"flowrate_per_min": flowrate_lpm}
 
 def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, soil_scaler):
     """

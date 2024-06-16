@@ -27,10 +27,17 @@ class ROFiltrationRequest(BaseModel):
 
 class SoilContaminationRequest(BaseModel):
     temperature: float = 27.125
-    sumpCapacity: float = 6000
+    sumpCapacity: float = 60000
     SoilQuantiy: float = 200
     
 class SandContaminationRequest(BaseModel):
     temperature: float = 27.125
-    sumpCapacity: float = 6000
+    sumpCapacity: float = 60000
     SandQuantiy: float = 200
+    
+class MotorFlowRateRequest(BaseModel):
+    voltage: float = 220
+    current: float = 10.11
+    power_factor: float = 0.11
+    motor_efficiency: float = 0.85
+    depth: float = 3
