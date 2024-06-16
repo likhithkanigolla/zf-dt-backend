@@ -66,6 +66,31 @@ def calculate_simulation(input_data):
     result = input_data.number1 + input_data.number2 + input_data.number3 + input_data.number4
     return {"result": result}
 
+# Write me a recursive function to calculate how many cycles it will take to reach the desired TDS
+# The function should take in the initial TDS, the desired TDS, and the TDS reduction rate
+# The function should return the number of cycles it will take to reach the desired TDS
+def calculate_cycles(initial_tds, desired_tds, tds_reduction_rate, permeate_flow_rate, volume_of_water):
+    """
+    Calculate the number of cycles to reach the desired TDS, the final TDS value, and the time it will take to filter the water
+    :param initial_tds: The initial TDS value
+    :param desired_tds: The desired TDS value
+    :param tds_reduction_rate: The TDS reduction rate
+    :param permeate_flow_rate: The permeate flow rate in liters per minute
+    :param volume_of_water: The volume of water in liters
+    :return: The number of cycles to reach the desired TDS, the final TDS value, and the time in hours to filter the water
+    """
+    if desired_tds >= initial_tds:
+        return 0, initial_tds, 0
+    else:
+        initial_tds_temp = initial_tds
+        cycles = 0
+        time_hours = 0
+        while initial_tds_temp > desired_tds:
+            cycles += 1
+            initial_tds_temp = calculate_tds_reduction(initial_tds_temp, tds_reduction_rate)
+            time_hours += volume_of_water / (permeate_flow_rate * 60)
+        return cycles, initial_tds_temp, time_hours
+
 def calculate_ro_filtration(params: ROFiltrationRequest):
     """
     Calculate the reverse osmosis filtration based on the input parameters
@@ -87,30 +112,12 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     print("type of desired", type(desired_tds), desired_tds)
     
     # initial_tds=calculate_tds(voltage,temperature)
-
-    max_iterations = 10
-    cycle_count = 0
-    
     osmotic_pressure = calculate_osmotic_pressure(C)
 
-    while cycle_count < max_iterations:
-        cycle_count += 1
-        water_flux = calculate_water_flux(P, delta_P, mu, L)
-        permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
-        time_estimation_hours = volume_of_water / permeate_flow_rate
-        tds_reduction_rate = 0.70
-        # print(initial_tds_temp)
-        initial_tds_temp = initial_tds
-        print("initial TDS Temp:", initial_tds_temp)
-        tds_final = calculate_tds_reduction(initial_tds_temp, tds_reduction_rate)
-        initial_tds_temp = tds_final
-
-        print(cycle_count,tds_final)
-        if desired_tds >= tds_final:
-            break
-
-    # tds_calculated = calculate_tds(voltage, temperature)
-    print("initial TDS", initial_tds)
+    water_flux = calculate_water_flux(P, delta_P, mu, L)
+    permeate_flow_rate = calculate_permeate_flow_rate(A, water_flux)
+    
+    cycle_count,tds_final,time_estimation_hours = calculate_cycles(initial_tds, desired_tds, 0.70, permeate_flow_rate, volume_of_water)
 
     return {
         "osmotic_pressure": osmotic_pressure,
