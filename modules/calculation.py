@@ -107,6 +107,7 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     C = params.molar_concentration
     voltage = params.voltage
     temperature = params.temperature
+    timeMultiplier = params.timeMultiplier
     volume_of_water = params.sump_capacity
     print("Volume of the water:", volume_of_water)
     print("type of desired", type(desired_tds), desired_tds)
@@ -122,11 +123,11 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     return {
         "osmotic_pressure": osmotic_pressure,
         "water_flux": water_flux,
-        "permeate_flow_rate": permeate_flow_rate,
+        "permeate_flow_rate": permeate_flow_rate*timeMultiplier,
         "final_tds_concentration_after_ro_tank": tds_final,
         "calculated_tds_value": initial_tds,
         "cycle_count": cycle_count,
-        "time_estimation_hours": time_estimation_hours
+        "time_estimation_hours": time_estimation_hours/timeMultiplier
     }
 
 def motor_flow_rate(params: MotorFlowRateRequest):
@@ -135,13 +136,14 @@ def motor_flow_rate(params: MotorFlowRateRequest):
     power_factor = params.power_factor
     motor_efficiency = params.motor_efficiency
     depth  = params.depth
+    timeMultiplier=params.timeMultiplier
     
     power_input = voltage * current * (math.sqrt(3)) * power_factor
     p_mechanical = power_input * motor_efficiency
     p_hydraulic = p_mechanical
     flowrate = p_hydraulic / (1000 * 9.81 * depth)
     flowrate_lpm = flowrate * 1000 #Converting to liters per minute
-    return {"flowrate_per_min": flowrate_lpm}
+    return {"flowrate_per_min": flowrate_lpm*timeMultiplier}
 
 def calculate_soil_contamination(params: SoilContaminationRequest, soil_model, soil_scaler):
     """

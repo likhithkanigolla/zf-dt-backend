@@ -24,6 +24,7 @@ class ROFiltrationRequest(BaseModel):
     voltage: float = 10.0
     temperature: float = 30.0
     sump_capacity: float=100
+    timeMultiplier: int = 1
 
 class SoilContaminationRequest(BaseModel):
     temperature: float = 27.125
@@ -41,3 +42,4 @@ class MotorFlowRateRequest(BaseModel):
     power_factor: float = 0.11
     motor_efficiency: float = 0.85
     depth: float = 3
+    timeMultiplier: int = 1
