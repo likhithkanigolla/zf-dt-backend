@@ -2,10 +2,23 @@ from fastapi import APIRouter
 from modules import data_processing
 from modules.database import db
 from starlette.concurrency import run_in_threadpool
-from modules import post_data
+from modules import post_data, telegram
+import asyncio
 
 
 router = APIRouter()
+
+# Predefined node IDs
+node_ids = [
+    "WM-WF-KH95-40", "WM-WD-KH98-00", "WM-WL-KH98-00", "DM-KH98-60", 
+    "WM-WF-KH98-40", "WM-WD-KH96-00", "WM-WL-KH00-00", "WM-WF-KB04-70", 
+    "WM-WF-KB04-73", "WM-WD-KH96-01", "WM-WD-KH04-00", "WM-WF-KB04-71", 
+    "WM-WF-KB04-72", "WM-WD-KH95-00", "WM-WD-KH03-00"
+]
+
+# node_ids = [
+#     "WM-WD-KH96-00","WM-WL-KH98-00"
+# ]
 
 @router.post("/calibdata")
 async def node_act_sub(data: dict):
@@ -35,3 +48,16 @@ async def get_value(table_name: str):
     result = await run_in_threadpool(data_processing.get_real_time_data, db, table_name)
     return result
 
+@router.post("/telegram")
+async def send_telegram(node_name:str, time:str):
+    return telegram.check_node_status(node_name,time, db)
+
+
+async def check_node_status_periodically():
+    while True:
+        for node_id in node_ids:
+            await telegram.check_node_status(node_id, "3h", db)
+        await asyncio.sleep(300)  # Wait for 1 minute
+
+# Start the periodic task
+asyncio.create_task(check_node_status_periodically())
