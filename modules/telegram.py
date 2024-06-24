@@ -1,13 +1,22 @@
 import requests
+import os
 from time import time
 from datetime import datetime, timezone
 from dateutil import parser as date_parser
-from modules import data_processing
+from modules import data_processing,post_data
+from dotenv import load_dotenv
 
 # Constants
-BACKEND_API = "http://smartcitylivinglab.iiit.ac.in:1629"
-TELEGRAM_BOT_TOKEN = '7199765070:AAENYGOUL0XLq4CrwMfysoxM39Crgawi4ik'
-TELEGRAM_CHAT_ID = '-4205613285'
+# TELEGRAM_BOT_TOKEN = '7199765070:AAENYGOUL0XLq4CrwMfysoxM39Crgawi4ik'
+# TELEGRAM_CHAT_ID = '-4205613285'
+
+load_dotenv()
+filtered_water_tds = os.getenv('filtered_water_tds')
+unfiltered_water_tds = os.getenv('unfiltered_water_tds')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID =  os.getenv('TELEGRAM_CHAT_ID')
+
+deadnode_check = {}
 
 def send_telegram_notification(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -63,8 +72,23 @@ async def check_node_status(node_id, time_str, db):
 
         if time_difference > time_limit:
             message = f"Node {node_id} is down!"
-            print(message)
+            # print(message)
             send_telegram_notification(message)
+            # Increase the value of the node_id in deadnode_check dictionary
+            deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
+            print(deadnode_check)
+            
+            # Check if the value exceeds 6
+            if deadnode_check[node_id] > 6:
+                # Reset the value to 0
+                deadnode_check[node_id] = 0
+                
+                # Send notification to Telegram
+                message = f"Node {node_id} is down for the last 3 hours. Resetting the node."
+                send_telegram_notification(message)
+                post_data.post_to_onem2m_act(node_id, 1)
+                message = f"Node {node_id} is reset."
+                send_telegram_notification(message)
 
         # Check TDS value for specific nodes
         tds_thresholds = {
@@ -81,11 +105,11 @@ async def check_node_status(node_id, time_str, db):
             if tds_value is not None:
                 if tds_value > tds_thresholds[node_id]:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is {tds_value} (exceeds threshold)"
-                    print(tds_alert_message)
+                    # print(tds_alert_message)
                     send_telegram_notification(tds_alert_message)
                 elif tds_value < lower_threshold:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is {tds_value} (below lower threshold)"
-                    print(tds_alert_message)
+                    # print(tds_alert_message)
                     send_telegram_notification(tds_alert_message)
         return True
 
