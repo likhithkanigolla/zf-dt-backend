@@ -96,6 +96,9 @@ async def check_node_status(node_id, time_str, db):
                     deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
                     send_telegram_notification(tds_alert_message)
                     
+        
+        #Adding the node_id to the dictionary if it is not present
+        deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 0
         # Check if the value exceeds 6
         if deadnode_check[node_id] > 6:
             # Reset the value to 0
