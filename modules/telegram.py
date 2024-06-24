@@ -80,6 +80,7 @@ async def check_node_status(node_id, time_str, db):
 
         if time_difference > time_limit:
             message = f"Node {node_id} is down!"
+            print(message)
             send_telegram_notification(message)
             # Increase the value of the node_id in deadnode_check dictionary
             deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
@@ -106,11 +107,12 @@ async def check_node_status(node_id, time_str, db):
                 
             # Send notification to Telegram
             message = f"Node {node_id} is down for the last 3 hours. Resetting the node."
+            print(message)
             send_telegram_notification(message)
             post_data.post_to_onem2m_act(node_id, 1)
             message = f"Node {node_id} is reset."
+            print(message)
             send_telegram_notification(message)
-        print(deadnode_check)
             
         return True
 
