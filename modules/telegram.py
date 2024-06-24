@@ -16,6 +16,18 @@ unfiltered_water_tds = os.getenv('unfiltered_water_tds')
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID =  os.getenv('TELEGRAM_CHAT_ID')
 
+        # Check TDS value for specific nodes
+tds_thresholds = {
+    "WM-WD-KH98-00": unfiltered_water_tds,
+    "WM-WD-KH96-00": unfiltered_water_tds,
+    "WM-WD-KH96-01": unfiltered_water_tds,
+    "WM-WD-KH04-00": filtered_water_tds,
+    "WM-WD-KH03-00": filtered_water_tds,
+    "WM-WD-KH95-00": filtered_water_tds
+    }
+
+lower_threshold = 50
+
 deadnode_check = {}
 
 def send_telegram_notification(message):
@@ -89,16 +101,6 @@ async def check_node_status(node_id, time_str, db):
                 post_data.post_to_onem2m_act(node_id, 1)
                 message = f"Node {node_id} is reset."
                 send_telegram_notification(message)
-
-        # Check TDS value for specific nodes
-        tds_thresholds = {
-            "WM-WD-KH98-00": 500,
-            "WM-WD-KH96-00": 500,
-            "WM-WD-KH04-00": 150,
-            "WM-WD-KH95-00": 150
-        }
-
-        lower_threshold = 50
 
         if node_id in tds_thresholds:
             tds_value = data.get('compensated_tds')
