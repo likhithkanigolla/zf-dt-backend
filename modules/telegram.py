@@ -42,7 +42,7 @@ def send_telegram_notification(message):
         response.raise_for_status()
         data = response.json()
         if data['ok']:
-            print('Telegram notification sent successfully')
+            print(message)
         else:
             print('Failed to send Telegram notification')
     except requests.RequestException as e:
@@ -110,6 +110,7 @@ async def check_node_status(node_id, time_str, db):
             post_data.post_to_onem2m_act(node_id, 1)
             message = f"Node {node_id} is reset."
             send_telegram_notification(message)
+        print(deadnode_check)
             
         return True
 
