@@ -42,9 +42,9 @@ def send_telegram_notification(message):
         response.raise_for_status()
         data = response.json()
         if data['ok']:
-            print('Telegram notification sent successfully:', data)
+            print('Telegram notification sent successfully')
         else:
-            print('Failed to send Telegram notification:', data)
+            print('Failed to send Telegram notification')
     except requests.RequestException as e:
         print('Error sending Telegram notification:', e)
 
@@ -62,10 +62,6 @@ async def check_node_status(node_id, time_str, db):
     try:
         # Fetch node data
         data = data_processing.get_real_time_data(db, node_id)
-        
-        print(f"Node {node_id} data:")
-        for key, value in data.items():
-            print(f"{key}: {value}")
 
         # Extract and convert timestamp to epoch
         timestamp = data['timestamp']
@@ -84,35 +80,34 @@ async def check_node_status(node_id, time_str, db):
 
         if time_difference > time_limit:
             message = f"Node {node_id} is down!"
-            # print(message)
             send_telegram_notification(message)
             # Increase the value of the node_id in deadnode_check dictionary
             deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
-            print(deadnode_check)
-            
-            # Check if the value exceeds 6
-            if deadnode_check[node_id] > 6:
-                # Reset the value to 0
-                deadnode_check[node_id] = 0
-                
-                # Send notification to Telegram
-                message = f"Node {node_id} is down for the last 3 hours. Resetting the node."
-                send_telegram_notification(message)
-                post_data.post_to_onem2m_act(node_id, 1)
-                message = f"Node {node_id} is reset."
-                send_telegram_notification(message)
 
         if node_id in tds_thresholds:
             tds_value = data.get('compensated_tds')
             if tds_value is not None:
                 if tds_value > tds_thresholds[node_id]:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is {tds_value} (exceeds threshold)"
-                    # print(tds_alert_message)
                     send_telegram_notification(tds_alert_message)
                 elif tds_value < lower_threshold:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is negitive: {tds_value}"
-                    # print(tds_alert_message)
+                    # Increase the value of the node_id in since value is negitive
+                    deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
                     send_telegram_notification(tds_alert_message)
+                    
+        # Check if the value exceeds 6
+        if deadnode_check[node_id] > 6:
+            # Reset the value to 0
+            deadnode_check[node_id] = 0
+                
+            # Send notification to Telegram
+            message = f"Node {node_id} is down for the last 3 hours. Resetting the node."
+            send_telegram_notification(message)
+            post_data.post_to_onem2m_act(node_id, 1)
+            message = f"Node {node_id} is reset."
+            send_telegram_notification(message)
+            
         return True
 
     except requests.RequestException as e:
