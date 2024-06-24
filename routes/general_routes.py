@@ -57,7 +57,7 @@ async def check_node_status_periodically():
     while True:
         for node_id in node_ids:
             await telegram.check_node_status(node_id, "3h", db)
-        await asyncio.sleep(300)  # Wait for 1 minute
+        await asyncio.sleep(1800)  # Wait for 30 minutes
 
 # Start the periodic task
 asyncio.create_task(check_node_status_periodically())
