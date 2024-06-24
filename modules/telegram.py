@@ -26,7 +26,7 @@ tds_thresholds = {
     "WM-WD-KH95-00": float(filtered_water_tds)
     }
 
-lower_threshold = 50
+lower_threshold = 0
 
 deadnode_check = {}
 
@@ -110,7 +110,7 @@ async def check_node_status(node_id, time_str, db):
                     # print(tds_alert_message)
                     send_telegram_notification(tds_alert_message)
                 elif tds_value < lower_threshold:
-                    tds_alert_message = f"Alert! Node {node_id} TDS value is {tds_value} (below lower threshold)"
+                    tds_alert_message = f"Alert! Node {node_id} TDS value is negitive: {tds_value}"
                     # print(tds_alert_message)
                     send_telegram_notification(tds_alert_message)
         return True
