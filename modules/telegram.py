@@ -18,12 +18,12 @@ TELEGRAM_CHAT_ID =  os.getenv('TELEGRAM_CHAT_ID')
 
         # Check TDS value for specific nodes
 tds_thresholds = {
-    "WM-WD-KH98-00": unfiltered_water_tds,
-    "WM-WD-KH96-00": unfiltered_water_tds,
-    "WM-WD-KH96-01": unfiltered_water_tds,
-    "WM-WD-KH04-00": filtered_water_tds,
-    "WM-WD-KH03-00": filtered_water_tds,
-    "WM-WD-KH95-00": filtered_water_tds
+    "WM-WD-KH98-00": float(unfiltered_water_tds),
+    "WM-WD-KH96-00": float(unfiltered_water_tds),
+    "WM-WD-KH96-01": float(unfiltered_water_tds),
+    "WM-WD-KH04-00": float(filtered_water_tds),
+    "WM-WD-KH03-00": float(filtered_water_tds),
+    "WM-WD-KH95-00": float(filtered_water_tds)
     }
 
 lower_threshold = 50
