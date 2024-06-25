@@ -9,14 +9,16 @@ import asyncio
 router = APIRouter()
 
 # Predefined node IDs
-node_ids = [
+water_quality_nodes = ["WM-WD-KH98-00","WM-WD-KH96-00","WM-WD-KH96-01", "WM-WD-KH04-00", "WM-WD-KH95-00", "WM-WD-KH03-00"]
+other_nodes = [
     "WM-WF-KH95-40", "WM-WD-KH98-00", "WM-WL-KH98-00", "DM-KH98-60", 
     "WM-WF-KH98-40", "WM-WD-KH96-00", "WM-WL-KH00-00", "WM-WF-KB04-70", 
     "WM-WF-KB04-73", "WM-WD-KH96-01", "WM-WD-KH04-00", "WM-WF-KB04-71", 
     "WM-WF-KB04-72", "WM-WD-KH95-00", "WM-WD-KH03-00"
 ]
 
-# node_ids = [
+
+# water_quality_nodes = [
 #     "WM-WD-KH96-00","WM-WL-KH98-00"
 # ]
 
@@ -53,11 +55,18 @@ async def send_telegram(node_name:str, time:str):
     return telegram.check_node_status(node_name,time, db)
 
 
-async def check_node_status_periodically():
+async def check_waterquality_node_status_periodically():
     while True:
-        for node_id in node_ids:
+        for node_id in water_quality_nodes:
             await telegram.check_node_status(node_id, "3h", db)
         await asyncio.sleep(1800)  # Wait for 30 minutes
+        
+async def check_node_status_periodically():
+    while True:
+        for node_id in other_nodes:
+            await telegram.check_node_status(node_id, "10m", db)
+        await asyncio.sleep(600)  # Wait for 10 minutes
 
 # Start the periodic task
 asyncio.create_task(check_node_status_periodically())
+asyncio.create_task(check_waterquality_node_status_periodically())
