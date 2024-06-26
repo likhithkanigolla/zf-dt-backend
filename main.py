@@ -4,6 +4,7 @@ from modules import database
 from routes.subscription_routes import router as subscription_router
 from routes.calculate_routes import router as calculate_router
 from routes.general_routes import router as general_router
+from routes.authentication import router as authentication_router
 import uvicorn
 
 app = FastAPI(
@@ -26,6 +27,7 @@ db = database
 app.include_router(general_router, prefix="", tags=["General Routes"])
 app.include_router(calculate_router, prefix="", tags=["Calculation Models"])
 app.include_router(subscription_router, prefix="", tags=["Subscriptions"])
+app.include_router(authentication_router, prefix="", tags=["Authentication"])
 
 
 

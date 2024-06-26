@@ -1,4 +1,12 @@
 -- Creation of Tables 
+-- Authenticaltion Users Table 
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    hashed_password VARCHAR(255) NOT NULL
+);
+
+
 --Added IF Not Exists to avoid errors when creating tables that already exist
 -- Motor Node SQL Statements
 CREATE TABLE IF NOT EXISTS "DM-KH98-60" (
