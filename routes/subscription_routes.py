@@ -92,8 +92,8 @@ async def node_act_sub(table_name: str, data: dict):
     
     
 
-@router.post("/actuation/{node_type}/{node_name}/{status}")
-async def node_act(node_type: str,node_name: str, status: str):
+@router.post("/actuation/{node_name}/{status}")
+async def node_act(node_name: str, status: str):
     """
     Perform node actuation.
 
@@ -105,5 +105,5 @@ async def node_act(node_type: str,node_name: str, status: str):
     Returns:
         dict: The result of the actuation.
     """
-    return post_data.post_to_onem2m_act(node_type , node_name, status)
+    return post_data.post_to_onem2m_act(node_name, status)
 
