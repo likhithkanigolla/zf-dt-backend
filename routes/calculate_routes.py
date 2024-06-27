@@ -9,14 +9,14 @@ soil_model, soil_scaler = load_soil_module()
 sand_model, sand_scaler = load_sand_module()
 router = APIRouter()
 
-@router.post("/calculate")
-async def calculate_simulation(input_data: SimulationInput):
-    """
-    Calculate the sum of the input data
-    :param input_data: SimulationInput
-    :return: Dictionary with the calculated sum
-    """
-    return calculate_simulation(input_data)
+# @router.post("/calculate")
+# async def calculate_simulation(input_data: SimulationInput):
+#     """
+#     Calculate the sum of the input data
+#     :param input_data: SimulationInput
+#     :return: Dictionary with the calculated sum
+#     """
+#     return calculate_simulation(input_data)
 
 @router.post("/calculate_ro_filtration")
 def calculate_ro_filtration_pass(params: ROFiltrationRequest):

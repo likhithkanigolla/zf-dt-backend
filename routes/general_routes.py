@@ -49,9 +49,9 @@ async def get_value(table_name: str):
     result = await run_in_threadpool(data_processing.get_real_time_data, db, table_name)
     return result
 
-@router.post("/telegram")
-async def send_telegram(node_name:str, time:str):
-    return telegram.check_node_status(node_name,time, db)
+# @router.post("/telegram")
+# async def send_telegram(node_name:str, time:str):
+#     return telegram.check_node_status(node_name,time, db)
 
 
 async def check_waterquality_node_status_periodically():
