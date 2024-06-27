@@ -3,9 +3,9 @@ from passlib.context import CryptContext
 
 # Database connection details
 
-DATABASE_USER = "likhith"
-DATABASE_PASSWORD = "postgres"
-DATABASE_NAME = "zf_digitaltwin"
+DATABASE_USER = input("Enter Database Username: ")
+DATABASE_PASSWORD = input("Enter Database Password: ")
+DATABASE_NAME = input("Enter Database Name: ")
 
 # Create a connection to the database
 conn = psycopg2.connect(
@@ -22,8 +22,8 @@ cursor = conn.cursor()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # User details
-username = "admin"
-password = "inTROGaLCLascuRg"
+username = input("Enter Username: ")
+password = input("Enter Password: ")
 hashed_password = pwd_context.hash(password)
 
 # Insert query
