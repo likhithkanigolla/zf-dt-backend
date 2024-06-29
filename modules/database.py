@@ -29,7 +29,20 @@ class Database:
         # Check and create tables from SQL file
         self.create_tables()
 
+
+    def list_tables(self):
+        self.cur.execute("""
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public'
+        """)
+        return [row[0] for row in self.cur.fetchall()]
+
     def create_tables(self):
+        # List existing tables before creation
+        existing_tables = set(self.list_tables())
+        print("Existing tables before creation:", existing_tables)
+
         # Read SQL file
         sql_file = os.path.join(os.path.dirname(__file__), '../sql', 'postgres_tables.sql')
         with open(sql_file, 'r') as file:
@@ -46,11 +59,21 @@ class Database:
                 if statement:
                     # Attempt to execute the SQL statement
                     self.cur.execute(statement)
+            # Commit changes after all statements are executed successfully
             self.conn.commit()
+            print("Tables created successfully.")
         except Exception as e:
             # Handle any exceptions that occur during table creation
             print(f"Error creating tables: {str(e)}")
             self.conn.rollback()
+
+        # List existing tables after creation
+        new_tables = set(self.list_tables())
+        print("Existing tables after creation:", new_tables)
+
+        # Identify newly created tables
+        created_tables = new_tables - existing_tables
+        print("Newly created tables:", created_tables)
 
 #Creating a DB instance class
 db = Database()

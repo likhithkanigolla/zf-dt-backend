@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS "DM-KH98-60" (
     frequency FLOAT,
     power_factor FLOAT
 );
+
 -- Status and Actuation
 CREATE TABLE IF NOT EXISTS "DM-KH98-80" (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
