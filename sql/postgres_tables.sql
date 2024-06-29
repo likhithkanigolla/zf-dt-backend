@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS notifications (
     node_id VARCHAR(255),
     notification_type VARCHAR(255),
     notification_value TEXT,
-    read_status BOOLEAN DEFAULT FALSE 
+    read_status BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS alarms (
