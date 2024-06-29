@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from modules import data_processing
+from modules import data_processing,alarms,notifications
 from modules.database import db
 from starlette.concurrency import run_in_threadpool
 from modules import post_data, telegram
@@ -69,3 +69,38 @@ async def check_node_status_periodically():
 # Start the periodic task
 asyncio.create_task(check_node_status_periodically())
 asyncio.create_task(check_waterquality_node_status_periodically())
+
+
+@router.get("/notifications")
+# Get all notifications from the database
+async def read_notifications():
+    return await run_in_threadpool(notifications.read_notifications, db)
+
+@router.post("/create/notification")
+# Insert a notification into the database
+async def insert_notification(data: dict):
+    return await run_in_threadpool(notifications.insert_notification, db, data)
+
+
+@router.put("/{id}/notification/read")
+# Update the notification as read in the database
+async def read_notification(id: str):
+    return await run_in_threadpool(notifications.update_notification, db, id)
+
+
+@router.get("/alarms")
+# Get all alarms from the database
+async def read_alarms():
+    return await run_in_threadpool(alarms.read_alarms, db)
+
+@router.post("/create/alarm")
+# Insert an alarm into the database
+async def insert_alarm(data: dict):
+    return await run_in_threadpool(alarms.insert_alarm, db, data)
+
+@router.put("/{id}/alarm/read")
+# Update the alarm as read in the database
+async def read_alarm(id: str, remarks: dict):
+    return await run_in_threadpool(alarms.update_alarm, db, id, remarks)
+
+

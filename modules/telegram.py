@@ -3,7 +3,8 @@ import os
 from time import time
 from datetime import datetime, timezone
 from dateutil import parser as date_parser
-from modules import data_processing,post_data
+from modules import data_processing, post_data, notifications, alarms
+from modules.database import db
 from dotenv import load_dotenv
 
 # Constants
@@ -81,7 +82,9 @@ async def check_node_status(node_id, time_str, db):
         if time_difference > time_limit:
             message = f"Node {node_id} is down!"
             print(message)
+            alarm_data = {'node_id': node_id, 'alarm_type': 'down', 'alarm_value': message}
             send_telegram_notification(message)
+            alarms.insert_alarm(db, alarm_data)
             # Increase the value of the node_id in deadnode_check dictionary
             deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
 
@@ -90,9 +93,14 @@ async def check_node_status(node_id, time_str, db):
             if tds_value is not None:
                 if tds_value > tds_thresholds[node_id]:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is {tds_value} (exceeds threshold)"
+                    notification_data = {'node_id': node_id, 'notification_type': 'threshould','notification_value': tds_alert_message}
+                    notifications.insert_notification(db, notification_data)
                     send_telegram_notification(tds_alert_message)
+                    
                 elif tds_value < lower_threshold:
                     tds_alert_message = f"Alert! Node {node_id} TDS value is negitive: {tds_value}"
+                    notification_data = {'node_id': node_id, 'notification_type': 'negitive','notification_value': tds_alert_message}
+                    notifications.insert_notification(db, notification_data)
                     # Increase the value of the node_id in since value is negitive
                     deadnode_check[node_id] = deadnode_check.get(node_id, 0) + 1
                     send_telegram_notification(tds_alert_message)
