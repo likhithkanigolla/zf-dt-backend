@@ -7,6 +7,16 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Alarm and Notification Tables
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    node_id VARCHAR(255),
+    notification_type VARCHAR(255),
+    notification_value TEXT,
+    read_status BOOLEAN DEFAULT FALSE 
+);
+
 CREATE TABLE IF NOT EXISTS alarms (
     id SERIAL PRIMARY KEY,
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -17,14 +27,6 @@ CREATE TABLE IF NOT EXISTS alarms (
     resolved_remarks TEXT
 );
 
-CREATE TABLE IF NOT EXISTS notifications (
-    id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    node_id VARCHAR(255),
-    notification_type VARCHAR(255),
-    notification_value TEXT,
-    read_status BOOLEAN DEFAULT FALSE 
-);
 
 --Added IF Not Exists to avoid errors when creating tables that already exist
 -- Motor Node SQL Statements
