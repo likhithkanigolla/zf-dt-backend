@@ -98,7 +98,7 @@ async def read_alarms():
 async def insert_alarm(data: dict):
     return await run_in_threadpool(alarms.insert_alarm, db, data)
 
-@router.put("/{id}/alarm/read")
+@router.put("/{id}/alarm/resolve")
 # Update the alarm as read in the database
 async def read_alarm(id: str, remarks: dict):
     return await run_in_threadpool(alarms.update_alarm, db, id, remarks)
