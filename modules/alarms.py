@@ -1,22 +1,34 @@
 def insert_alarm(db_conn, data):
     """
-    Insert an alarm into the database.
+    Insert an alarm into the database if an alarm with the same node_id and alarm_value does not already exist.
 
     Args:
         db_conn: The database connection.
         data (dict): The alarm data to insert.
 
     Returns:
-        dict: The inserted alarm data.
+        dict or str: The inserted alarm data or a message indicating the alarm already exists.
     """
+    # Check if an alarm with the same node_id and alarm_value already exists
     db_conn.cur.execute(
-            """
-            INSERT INTO alarms (node_id, alarm_type, alarm_value)
-            VALUES (%s, %s, %s)
-            RETURNING id, timestamp, node_id, alarm_type, alarm_value;
-            """,
-            (data["node_id"], data["alarm_type"], data["alarm_value"])
-        )
+        """
+        SELECT 1 FROM alarms
+        WHERE node_id = %s AND alarm_value = %s AND alarm_status = TRUE;
+        """,
+        (data["node_id"], data["alarm_value"])
+    )
+    if db_conn.cur.fetchone():
+        return "Alarm with the same node_id and alarm_value already exists."
+
+    # If no existing alarm is found, insert the new alarm
+    db_conn.cur.execute(
+        """
+        INSERT INTO alarms (node_id, alarm_type, alarm_value)
+        VALUES (%s, %s, %s)
+        RETURNING id, timestamp, node_id, alarm_type, alarm_value;
+        """,
+        (data["node_id"], data["alarm_type"], data["alarm_value"])
+    )
     db_conn.conn.commit()
     alarm = db_conn.cur.fetchone()
     return alarm
