@@ -1,12 +1,17 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException,Request
+from fastapi.middleware.cors import CORSMiddleware
 from modules import data_processing,alarms,notifications
 from modules.database import db
+from modules.models import LogData
 from starlette.concurrency import run_in_threadpool
 from modules import post_data, telegram
-import asyncio
+import asyncio,os
+from datetime import datetime
+
 
 
 router = APIRouter()
+
 
 # Predefined node IDs
 water_quality_nodes = ["WM-WD-KH98-00","WM-WD-KH96-00","WM-WD-KH96-01", "WM-WD-KH96-02", "WM-WD-KH95-00", "WM-WD-KH03-00"]
@@ -102,5 +107,9 @@ async def insert_alarm(data: dict):
 # Update the alarm as read in the database
 async def read_alarm(id: str, remarks: dict):
     return await run_in_threadpool(alarms.update_alarm, db, id, remarks)
+
+@router.post("/save_log")
+async def save_log(request: Request):
+    return await data_processing.save_log_to_file(request)
 
 

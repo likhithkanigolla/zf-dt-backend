@@ -1,15 +1,12 @@
 from fastapi import HTTPException
 from .models import SensorData
 from sklearn.linear_model import LinearRegression
-import numpy as np
-import json
-from fastapi import HTTPException
-from .models import SensorData
-from sklearn.linear_model import LinearRegression
-import numpy as np
-import json
-import psycopg2
 from psycopg2 import Error
+from datetime import datetime
+import os
+import psycopg2
+import numpy as np
+import json
 
 def process_data(db, table_name, data, column_order):
     """
@@ -371,4 +368,24 @@ def voltage_calculation(soil_quantity):
         return {"predicted_voltage": predicted_voltage[0]}
     else:
         return {"error": "Soil quantity must be between 1 and 500 grams."}
+    
 
+async def save_log_to_file(request):
+    log_data = await request.body()
+    log_entry = log_data.decode("utf-8")  # Decode bytes to string
+
+    # Generate a filename based on the current date
+    filename = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "_log.txt"
+    
+    # Ensure the logs directory exists
+    logs_dir = "logs"
+    os.makedirs(logs_dir, exist_ok=True)
+    
+    # Append the log entry to the file
+    try:
+        with open(os.path.join(logs_dir, filename), "a") as file:
+            file.write(log_entry + "\n")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save log: {e}")
+    
+    return {"message": "Log saved successfully"}

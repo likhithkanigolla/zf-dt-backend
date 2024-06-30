@@ -43,3 +43,6 @@ class MotorFlowRateRequest(BaseModel):
     motor_efficiency: float = 0.85
     depth: float = 3
     timeMultiplier: int = 1
+    
+class LogData(BaseModel):
+    log_entry: str
