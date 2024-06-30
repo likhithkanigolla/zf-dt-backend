@@ -9,7 +9,7 @@ import asyncio
 router = APIRouter()
 
 # Predefined node IDs
-water_quality_nodes = ["WM-WD-KH98-00","WM-WD-KH96-00","WM-WD-KH96-01", "WM-WD-KH04-00", "WM-WD-KH95-00", "WM-WD-KH03-00"]
+water_quality_nodes = ["WM-WD-KH98-00","WM-WD-KH96-00","WM-WD-KH96-01", "WM-WD-KH96-02", "WM-WD-KH95-00", "WM-WD-KH03-00"]
 other_nodes = [
     "WM-WF-KH95-40", "WM-WL-KH98-00", "DM-KH98-60", "WM-WF-KH98-40", 
     "WM-WL-KH00-00", "WM-WF-KB04-70", "WM-WF-KB04-73", "WM-WF-KB04-71", "WM-WF-KB04-72",

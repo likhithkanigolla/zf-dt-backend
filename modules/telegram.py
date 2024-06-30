@@ -22,7 +22,7 @@ tds_thresholds = {
     "WM-WD-KH98-00": float(unfiltered_water_tds),
     "WM-WD-KH96-00": float(unfiltered_water_tds),
     "WM-WD-KH96-01": float(unfiltered_water_tds),
-    "WM-WD-KH04-00": float(filtered_water_tds),
+    "WM-WD-KH96-02": float(filtered_water_tds),
     "WM-WD-KH03-00": float(filtered_water_tds),
     "WM-WD-KH95-00": float(filtered_water_tds)
     }
