@@ -374,6 +374,9 @@ async def save_log_to_file(request):
     log_data = await request.body()
     log_entry = log_data.decode("utf-8")  # Decode bytes to string
 
+    # Parse the log entry as JSON
+    log_entry_json = json.loads(log_entry)
+
     # Generate a filename based on the current date
     filename = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "_log.txt"
     
@@ -381,10 +384,11 @@ async def save_log_to_file(request):
     logs_dir = "logs"
     os.makedirs(logs_dir, exist_ok=True)
     
-    # Append the log entry to the file
+    # Append each log line to the file
     try:
         with open(os.path.join(logs_dir, filename), "a") as file:
-            file.write(log_entry + "\n")
+            for log_line in log_entry_json["log"]:
+                file.write(log_line + "\n")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save log: {e}")
     
