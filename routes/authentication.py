@@ -1,16 +1,17 @@
 from datetime import datetime, timedelta
 from typing import Optional
-
+import pytz
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
+from jose.exceptions import ExpiredSignatureError, JWTError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from modules.database import db  # Import the Database instance
 
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -100,3 +101,18 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @router.get("/users/me", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.post("/introspect")
+# Check if the token is valid and not expired
+async def introspect(token_data: dict):
+    token = token_data.get("token")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        exp_datetime_utc = datetime.utcfromtimestamp(payload.get("exp")).replace(tzinfo=pytz.utc)
+        exp_datetime_ist = exp_datetime_utc.astimezone(pytz.timezone('Asia/Kolkata'))
+        formatted_exp = exp_datetime_ist.strftime('%Y-%m-%d %H:%M:%S') 
+        return {"active": True, "username": payload.get("sub"), "exp": formatted_exp}
+    except ExpiredSignatureError:
+        return {"active": False, "error": "Token expired"}
+    except JWTError:
+        return {"active": False, "error": "Invalid token"}
