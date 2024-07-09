@@ -113,6 +113,6 @@ async def introspect(token_data: dict):
         formatted_exp = exp_datetime_ist.strftime('%Y-%m-%d %H:%M:%S') 
         return {"active": True, "username": payload.get("sub"), "exp": formatted_exp}
     except ExpiredSignatureError:
-        return {"active": False, "error": "Token expired"}
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except JWTError:
-        return {"active": False, "error": "Invalid token"}
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
