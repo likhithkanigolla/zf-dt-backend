@@ -45,7 +45,7 @@ def calculate_permeate_flow_rate(A, water_flux):
     Calculate permeate flow rate using the formula:
     Q = A * J
     """
-    return (A * water_flux)/1000 #Converting to liters per minute
+    return A * water_flux / 1000  # Converting to liters per minute
 
 def calculate_tds_reduction(initial_tds, tds_reduction_rate):
     """
@@ -107,7 +107,8 @@ def calculate_ro_filtration(params: ROFiltrationRequest):
     C = params.molar_concentration
     voltage = params.voltage
     temperature = params.temperature
-    timeMultiplier = params.timeMultiplier
+    # timeMultiplier = params.timeMultiplier
+    timeMultiplier = 1
     volume_of_water = params.sump_capacity
     print("Volume of the water:", volume_of_water)
     print("type of desired", type(desired_tds), desired_tds)
@@ -136,7 +137,8 @@ def motor_flow_rate(params: MotorFlowRateRequest):
     power_factor = params.power_factor
     motor_efficiency = params.motor_efficiency
     depth  = params.depth
-    timeMultiplier=params.timeMultiplier
+    # timeMultiplier = params.timeMultiplier
+    timeMultiplier = 1
     
     power_input = voltage * current * (math.sqrt(3)) * power_factor
     p_mechanical = power_input * motor_efficiency
