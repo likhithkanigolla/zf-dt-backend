@@ -64,7 +64,7 @@ def process_data(db, table_name, data, column_order):
     except Exception as e:
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
-    
+ 
 def process_str_data(db, table_name, data, column_order):
     """
     Process and insert string data into the specified table in the database.
@@ -161,7 +161,6 @@ def process_calibdata(db, data):
         # Rollback the transaction if an error occurs
         db.conn.rollback()
         return {"error": str(e)}
-
 
 
 

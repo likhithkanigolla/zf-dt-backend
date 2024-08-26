@@ -48,3 +48,30 @@ def post_to_onem2m_act(node_name, status):
     response = requests.post(url, headers=headers, data=payload)
     print("Response Code: ", response.status_code)
     return response.status_code
+
+
+def post_to_dev_onem2m_act(status):
+    DEV_BACKEND_URL = "http://dev-onem2m.iiit.ac.in:443/~/in-cse/in-name/AE-DT/WM-WD-KRB-M1/ACT/"
+    # container_name = get_container_name(node_name)
+    # if container_name == "No matching container found":
+    #     print(f"No matching container found for node name: {node_name}")
+    #     return
+
+    # epoch_time = int(time.time())
+    data_list = [status]  # Initialize the data list with some default values
+    url = DEV_BACKEND_URL
+    # print(url)
+    data_list = str(data_list)
+    payload = json.dumps({
+        "m2m:cin": {
+            "con": data_list
+        }
+    })
+    headers = {
+        'X-M2M-Origin': 'Tue_20_12_22:Tue_20_12_22',
+        'Content-Type': 'application/json;ty=4'
+    }
+    response = requests.post(url, headers=headers, data=payload)
+    print("Response Code: ", response.status_code)
+    return response.status_code
+

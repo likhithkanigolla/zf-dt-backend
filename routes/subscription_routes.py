@@ -107,3 +107,20 @@ async def node_act(node_name: str, status: str):
     """
     return post_data.post_to_onem2m_act(node_name, status)
 
+
+@router.post("/motor/actuation/{status}")
+async def node_act(status: str):
+    """
+    Perform node actuation.
+
+    Args:
+        node_type (str): The type of the node.
+        node_name (str): The name of the node.
+        status (str): The status of the actuation.
+
+    Returns:
+        dict: The result of the actuation.
+    """
+    return post_data.post_to_dev_onem2m_act(status)
+
+
