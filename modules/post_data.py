@@ -58,7 +58,12 @@ def post_to_dev_onem2m_act(status):
     #     return
 
     # epoch_time = int(time.time())
+    status = int(status)
+    print("type", type(status), status)
     data_list = [status]  # Initialize the data list with some default values
+    
+    print("data_list", data_list)
+    
     url = DEV_BACKEND_URL
     # print(url)
     data_list = str(data_list)
