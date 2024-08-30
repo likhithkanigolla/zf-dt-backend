@@ -376,8 +376,11 @@ async def save_log_to_file(request):
     # Parse the log entry as JSON
     log_entry_json = json.loads(log_entry)
 
-    # Generate a filename based on the current date
-    filename = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "_log.txt"
+    # Extract the scenario name from the request
+    scenario_name = log_entry_json.get("scenario", "default_scenario")
+
+    # Generate a filename based on the scenario name and current date
+    filename = f"{scenario_name}_{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}_log.txt"
     
     # Ensure the logs directory exists
     logs_dir = "logs"
