@@ -208,3 +208,31 @@ CREATE TABLE IF NOT EXISTS roplant1_tds (
     creationtime TIMESTAMP WITH TIME ZONE,
     tds FLOAT
 );
+
+-- Test Setup Tables
+CREATE TABLE IF NOT EXISTS "WM-WD-NODE-1" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    temperature FLOAT,
+    voltage FLOAT,
+    uncompensated_tds FLOAT,
+    compensated_tds FLOAT
+);
+
+CREATE TABLE IF NOT EXISTS "WM-WD-NODE-2" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    temperature FLOAT,
+    voltage FLOAT,
+    uncompensated_tds FLOAT,
+    compensated_tds FLOAT
+);
+
+CREATE TABLE IF NOT EXISTS "WM-WD-NODE-3" (
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    creationtime TIMESTAMP WITH TIME ZONE,
+    temperature FLOAT,
+    voltage FLOAT,
+    uncompensated_tds FLOAT,
+    compensated_tds FLOAT
+);

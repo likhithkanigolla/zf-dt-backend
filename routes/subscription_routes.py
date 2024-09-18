@@ -124,3 +124,16 @@ async def node_act(status: str):
     return post_data.post_to_dev_onem2m_act(status)
 
 
+@router.post("/testwaterqualitysub/{table_name}")
+async def water_quality_sub(table_name: str, data: dict):
+    """
+    Subscribe to water quality data updates.
+
+    Args:
+        table_name (str): The name of the table to subscribe to.
+        data (dict): The data to process.
+
+    Returns:
+        dict: The processed data.
+    """
+    return data_processing.process_test_water_quality_sub(db, table_name, data)

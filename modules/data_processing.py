@@ -123,6 +123,64 @@ def process_str_data(db, table_name, data, column_order):
         print('Error inserting data into PostgreSQL:', str(e))
         raise ValueError('Internal Server Error')
 
+# To be removed once the changes made to hardware
+def process_test_data(db, table_name, data, column_order):
+    """
+    Process and insert data into the specified table in the database.
+
+    Args:
+        db (Database): The database connection object.
+        table_name (str): The name of the table to insert the data into.
+
+        data (dict): The data to be processed and inserted.
+        column_order (list): The order of columns in the table.
+
+    Returns:
+        dict: A dictionary with a success message.
+
+
+    Raises:
+        ValueError: If there is an error in the request format or con values.
+    """
+
+    try:
+
+        # Extract data from the received JSON
+        cin = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('con', None)
+        if cin is None:
+            raise ValueError('Invalid request format. Missing "con" field.')
+        con_values = json.loads(cin)
+
+
+        if any(map(lambda x: x != x, con_values)):
+            raise ValueError('Invalid con values. Please check the format.')
+        creation_time = data.get('m2m:sgn', {}).get('m2m:nev', {}).get('m2m:rep', {}).get('m2m:cin', {}).get('ct', None)
+        if creation_time is None:
+            raise ValueError('Invalid request format. Missing "ct" field.')
+        timestamp = creation_time.replace('T', ' ').replace('Z', '')
+
+        insert_statement = f"""
+            INSERT INTO "{table_name}" 
+            (creationtime, {', '.join(column_order)}) 
+            VALUES (%s, {', '.join(['%s' for _ in range(len(column_order))])})
+        """
+        try:
+            db.cur.execute(
+            insert_statement,
+            [timestamp] + [con_values[i] for i in range(len(column_order))]
+            )
+            db.conn.commit()
+            print('Data inserted successfully into table:', table_name)
+            return {'message': 'Data received and inserted successfully.'}
+        except psycopg2.errors.InFailedSqlTransaction as e:
+            print('Error inserting data into PostgreSQL:', str(e))
+            db.conn.rollback()
+            db.reset_connection()  # Reset the database connection
+            return {'message': 'DB Connection Reset successfully.'}
+    except Exception as e:
+        print('Error inserting data into PostgreSQL:', str(e))
+        raise ValueError('Internal Server Error')
+ 
 
 def process_calibdata(db, data):
     """
@@ -181,6 +239,25 @@ def process_water_quality_sub(db, table_name, data):
         ValueError: If there is an error in the request format or con values.
     """
     return process_data(db, table_name, data, ['temperature', 'voltage', 'uncompensated_tds', 'compensated_tds'])
+
+# To be removed once the changes made to hardware
+def process_test_water_quality_sub(db, table_name, data):
+    """
+
+    Process and insert water quality data into the specified table in the database.
+
+    Args:
+        db (Database): The database connection object.
+        table_name (str): The name of the table to insert the data into.
+        data (dict): The water quality data to be processed and inserted.
+
+    Returns:
+        dict: A dictionary with a success message.
+
+    Raises:
+        ValueError: If there is an error in the request format or con values.
+    """
+    return process_test_data(db, table_name, data, ['temperature', 'uncompensated_tds', 'compensated_tds', 'voltage'])
 
 def process_raw_water_quality_sub(db, table_name, data):
     """
