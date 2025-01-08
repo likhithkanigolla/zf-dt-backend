@@ -8,10 +8,11 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies
-RUN pip install fastapi
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
 
-# Expose the necessary ports
-EXPOSE 8000
+# Expose the necessary port
+EXPOSE 1629
 
 # Define the command to run the backend
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "1629"]
